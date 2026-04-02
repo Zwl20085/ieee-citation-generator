@@ -1,0 +1,101 @@
+{
+  "_comment": "Publisher-specific metadata quirks and formatting notes for IEEE-style citations",
+
+  "publishers": {
+    "IEEE": {
+      "note": "Standard IEEE formatting — use vol., no., pp., doi directly",
+      "doi_prefix": "10.1109",
+      "page_format": "pp. {start}–{end}",
+      "article_number": "Art. no. {number}"
+    },
+    "ACM": {
+      "note": "ACM uses Article Number instead of page ranges for some publications",
+      "doi_prefix": "10.1145",
+      "page_format": "pp. {start}–{end}",
+      "article_number": "Art. no. {number}"
+    },
+    "Elsevier": {
+      "note": "Elsevier journals use standard vol/issue/page format. Some use article numbers.",
+      "doi_prefix": "10.1016",
+      "page_format": "pp. {start}–{end}",
+      "article_number": "Art. no. {number}"
+    },
+    "Springer": {
+      "note": "Springer LNCS uses volume for book-series numbering. Conference papers in LNCS: treat as book chapter.",
+      "doi_prefix": "10.1007",
+      "page_format": "pp. {start}–{end}",
+      "lncs_format": "in Lecture Notes Comput. Sci., vol. {volume}, pp. {start}–{end}"
+    },
+    "Wiley": {
+      "note": "Wiley uses standard format. Some journals use early-access article numbers.",
+      "doi_prefix": "10.1002",
+      "page_format": "pp. {start}–{end}"
+    },
+    "MDPI": {
+      "note": "MDPI open-access journals often use article numbers instead of page ranges.",
+      "doi_prefix": "10.3390",
+      "page_format": "Art. no. {number}",
+      "article_number": "Art. no. {number}"
+    },
+    "IET": {
+      "note": "IET journals follow similar format to IEEE. Use abbreviated journal names.",
+      "doi_prefix": "10.1049",
+      "page_format": "pp. {start}–{end}"
+    },
+    "Taylor & Francis": {
+      "note": "Standard vol/issue/page format.",
+      "doi_prefix": "10.1080",
+      "page_format": "pp. {start}–{end}"
+    },
+    "SAGE": {
+      "note": "Standard vol/issue/page format.",
+      "doi_prefix": "10.1177",
+      "page_format": "pp. {start}–{end}"
+    },
+    "Nature Publishing Group": {
+      "note": "Nature journals: abbreviated name, vol, pages, year.",
+      "doi_prefix": "10.1038",
+      "page_format": "pp. {start}–{end}"
+    },
+    "AAAS": {
+      "note": "Science journal. Standard format: vol, issue, pages.",
+      "doi_prefix": "10.1126",
+      "page_format": "pp. {start}–{end}"
+    },
+    "AIP": {
+      "note": "American Institute of Physics — J. Appl. Phys., Appl. Phys. Lett., etc.",
+      "doi_prefix": "10.1063",
+      "page_format": "Art. no. {number}"
+    },
+    "APS": {
+      "note": "American Physical Society — Phys. Rev. Lett., Phys. Rev. B, etc.",
+      "doi_prefix": "10.1103",
+      "page_format": "Art. no. {number}"
+    },
+    "SAE": {
+      "note": "SAE Technical Papers use paper number as identifier.",
+      "doi_prefix": "10.4271",
+      "page_format": "SAE Tech. Paper {number}"
+    },
+    "arXiv": {
+      "note": "Preprints — format as: Author, \"Title,\" arXiv preprint arXiv:{id}, Year.",
+      "doi_prefix": "10.48550",
+      "page_format": "arXiv:{id}"
+    }
+  },
+
+  "month_abbreviations": {
+    "January": "Jan.",
+    "February": "Feb.",
+    "March": "Mar.",
+    "April": "Apr.",
+    "May": "May",
+    "June": "Jun.",
+    "July": "Jul.",
+    "August": "Aug.",
+    "September": "Sep.",
+    "October": "Oct.",
+    "November": "Nov.",
+    "December": "Dec."
+  }
+}

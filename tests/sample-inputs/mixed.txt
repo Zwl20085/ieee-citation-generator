@@ -1,0 +1,5 @@
+Attention Is All You Need
+K. He, X. Zhang, S. Ren, J. Sun, Deep Residual Learning, CVPR 2016
+https://pytorch.org/docs/stable/index.html
+Goodfellow et al., Deep Learning, MIT Press, 2016
+arXiv:2005.14165

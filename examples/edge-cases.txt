@@ -1,0 +1,6 @@
+arXiv:2005.14165
+An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale
+SAE 2020-01-0461
+ISO 60034-1
+https://en.wikipedia.org/wiki/Electric_motor
+Yang, Z., et al. "Electromagnetic Design of Hairpin Winding Electric Machines for Automotive Applications," IEEE Trans. Transport. Electrific., 2023
