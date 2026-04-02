@@ -22,7 +22,7 @@ mkdir -p ~/.claude/skills/ieee-citation-data
 
 ```bash
 curl -fSL -o ~/.claude/skills/ieee-citation-generator.md \
-  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/main/skills/ieee-citation-generator.md"
+  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/skills/ieee-citation-generator.md"
 ```
 
 ### Step 3: Download the abbreviation data files
@@ -31,17 +31,17 @@ Run all three commands:
 
 ```bash
 curl -fSL -o ~/.claude/skills/ieee-citation-data/journal-abbreviations.json \
-  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/main/data/journal-abbreviations.json"
+  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/data/journal-abbreviations.json"
 ```
 
 ```bash
 curl -fSL -o ~/.claude/skills/ieee-citation-data/conference-abbreviations.json \
-  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/main/data/conference-abbreviations.json"
+  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/data/conference-abbreviations.json"
 ```
 
 ```bash
 curl -fSL -o ~/.claude/skills/ieee-citation-data/publisher-templates.json \
-  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/main/data/publisher-templates.json"
+  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/data/publisher-templates.json"
 ```
 
 ### Step 4: Verify installation

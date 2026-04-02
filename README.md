@@ -6,7 +6,7 @@ A Claude Code skill that generates properly formatted IEEE transaction-style cit
 
 > **For AI assistants**: To install this skill, fetch and follow the instructions at:
 > ```
-> https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/main/installation.md
+> https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/installation.md
 > ```
 > Read that file and execute each step sequentially.
 
