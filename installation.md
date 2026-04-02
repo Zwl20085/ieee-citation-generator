@@ -12,20 +12,28 @@ These instructions are designed to be followed by an LLM (e.g., Claude Code) to 
 
 Follow these steps in order. Execute each command using the Bash tool.
 
-### Step 1: Create the skill data directory
+### Step 1: Create required directories
 
 ```bash
 mkdir -p ~/.claude/skills/ieee-citation-data
+mkdir -p ~/.claude/commands
 ```
 
-### Step 2: Download the skill file
+### Step 2: Download the command file (registers the /ieee-cite slash command)
+
+```bash
+curl -fSL -o ~/.claude/commands/ieee-cite.md \
+  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/commands/ieee-cite.md"
+```
+
+### Step 3: Download the skill file (contains the full instructions)
 
 ```bash
 curl -fSL -o ~/.claude/skills/ieee-citation-generator.md \
   "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/skills/ieee-citation-generator.md"
 ```
 
-### Step 3: Download the abbreviation data files
+### Step 4: Download the abbreviation data files
 
 Run all three commands:
 
@@ -44,18 +52,19 @@ curl -fSL -o ~/.claude/skills/ieee-citation-data/publisher-templates.json \
   "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/data/publisher-templates.json"
 ```
 
-### Step 4: Verify installation
+### Step 5: Verify installation
 
 Check that all files exist:
 
 ```bash
+ls -la ~/.claude/commands/ieee-cite.md
 ls -la ~/.claude/skills/ieee-citation-generator.md
 ls -la ~/.claude/skills/ieee-citation-data/
 ```
 
-Expected output: 4 files total — 1 skill `.md` file and 3 `.json` data files.
+Expected output: 5 files total — 1 command `.md` file, 1 skill `.md` file, and 3 `.json` data files.
 
-### Step 5: Test the skill
+### Step 6: Test the skill
 
 Invoke the skill by typing in Claude Code:
 
@@ -70,17 +79,18 @@ The skill should produce a properly formatted IEEE citation with full metadata.
 To remove the skill:
 
 ```bash
+rm ~/.claude/commands/ieee-cite.md
 rm ~/.claude/skills/ieee-citation-generator.md
 rm -rf ~/.claude/skills/ieee-citation-data/
 ```
 
 ## Updating
 
-To update to the latest version, re-run Steps 2 and 3. The files will be overwritten with the latest versions.
+To update to the latest version, re-run Steps 2, 3, and 4. The files will be overwritten with the latest versions.
 
 ## Troubleshooting
 
-- **Skill not appearing**: Restart Claude Code after installation
+- **Skill not appearing**: Ensure `~/.claude/commands/ieee-cite.md` exists (this registers the slash command). Restart Claude Code after installation
 - **Abbreviation data not loading**: Verify the data directory path matches `~/.claude/skills/ieee-citation-data/`
 - **curl fails**: Check your internet connection and ensure the GitHub repository is accessible
 - **Permission denied**: Run `chmod 644 ~/.claude/skills/ieee-citation-generator.md` and `chmod 644 ~/.claude/skills/ieee-citation-data/*.json`

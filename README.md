@@ -84,8 +84,9 @@ To add custom abbreviations, edit the JSON files in `~/.claude/skills/ieee-citat
 
 If you prefer to install manually:
 
-1. Copy `skills/ieee-citation-generator.md` to `~/.claude/skills/`
-2. Copy the `data/` directory contents to `~/.claude/skills/ieee-citation-data/`
+1. Copy `commands/ieee-cite.md` to `~/.claude/commands/` (registers the `/ieee-cite` slash command)
+2. Copy `skills/ieee-citation-generator.md` to `~/.claude/skills/` (the full skill instructions)
+3. Copy the `data/` directory contents to `~/.claude/skills/ieee-citation-data/`
 
 ```bash
 # Clone the repo
@@ -93,8 +94,9 @@ git clone https://github.com/Zwl20085/ieee-citation-generator.git
 cd ieee-citation-generator
 
 # Install
+mkdir -p ~/.claude/commands ~/.claude/skills/ieee-citation-data
+cp commands/ieee-cite.md ~/.claude/commands/
 cp skills/ieee-citation-generator.md ~/.claude/skills/
-mkdir -p ~/.claude/skills/ieee-citation-data/
 cp data/*.json ~/.claude/skills/ieee-citation-data/
 ```
 
