@@ -18,7 +18,8 @@ An IEEE citation skill package that supports both Claude Code and Codex. It gene
 ## What It Does
 
 - Takes paper titles, partial citations, or messy reference text as input
-- Looks up missing metadata (authors, year, DOI, volume, pages) via web search
+- Uses the title as the primary anchor and verifies metadata from search results before formatting
+- Looks up or re-checks metadata (authors, year, DOI, volume, pages) via web search
 - Formats everything in correct IEEE citation style
 - Handles journal articles, conference papers, books, websites, and arXiv preprints
 - Uses standard IEEE abbreviations (e.g., "IEEE Trans. Power Electron.", "in Proc. IEEE Int. Conf. Elect. Mach. Drives")
@@ -77,12 +78,16 @@ Saved file names:
 
 The saved Word document should format each citation as:
 - one justified paragraph per citation
+- visible spacing between citation paragraphs
 - Times New Roman for all text
 - curly quotation marks `“ ”` around article and paper titles
 - en dash `–` for page ranges, never hyphen `-`
 - italic journal and conference venue names only
 - superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`
 - never substitute `?` for quotation marks or page-range dashes
+- use exactly one space between the closing title quote and the following venue text
+
+The chat response should also keep a blank line between adjacent references so they do not run together visually.
 
 Word output is the default because many plain-text editors and clipboard paths silently replace or mangle the punctuation IEEE references require, especially title quotes and page-range dashes.
 
@@ -162,6 +167,7 @@ This skill follows the [IEEE Reference Guide](https://ieeeauthorcenter.ieee.org/
 - Author names: initials before surname (e.g., "J. K. Smith")
 - "and" before the last author; "et al." for 7+ authors
 - Article titles in double quotes, sentence case
+- Use exactly one space after the closing title quote before the following venue text
 - Journal and conference names abbreviated per IEEE standards
 - En dash for page ranges in the saved Word document
 - Saved Word output uses Times New Roman and justified paragraphs
