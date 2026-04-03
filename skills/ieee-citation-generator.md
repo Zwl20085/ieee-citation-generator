@@ -50,6 +50,12 @@ If any required fields are missing, use web search to find them.
 
 **IMPORTANT**: When web search returns results, verify the result matches the intended paper (check title similarity, not just partial matches). If uncertain, present the found metadata to the user and ask for confirmation.
 
+Before finalizing any reference, run a post-generation verification pass:
+- Re-check the complete author list and the initials-plus-surname sequence against the best available source
+- Confirm the publication date is complete and correctly reflected in the citation
+- Check whether any information was lost during formatting, such as missing authors, pages, article numbers, venue details, city/country, month, or year
+- If the first web result is incomplete or conflicting, continue searching until the citation is as complete and accurate as the available sources allow, or surface the ambiguity to the user
+
 ### Step 4: Apply Abbreviations
 
 Load the abbreviation data from the skill's data directory:
@@ -166,6 +172,7 @@ Rules:
    - Italicize journal and conference venue names only
    - Render ordinal suffixes `st`, `nd`, `rd`, and `th` as superscript wherever they appear
    - Treat the `.docx` file as the primary artifact even though the conversation response remains plain text
+4. Before returning or saving the citations, confirm that no author names, publication-date fields, or other verified metadata were dropped during reformatting.
 
 ### Special Handling
 

@@ -31,16 +31,21 @@ Use this skill when the user asks for IEEE citations, mentions `ieee-citation-ge
    - If needed, search title plus an author name.
    - Use DOI or arXiv pages directly when available.
    - Verify the result matches the intended work before formatting.
-4. Load the local data files from this skill directory before formatting:
+4. After generating each reference, run a final verification pass.
+   - Re-check the author list and author-name order against the best available source.
+   - Confirm the publication date is complete and correctly reflected in the citation.
+   - Check whether any information was lost during formatting, such as missing authors, pages, article numbers, venue details, city/country, month, or year.
+   - If the web result is incomplete or conflicting, continue searching until the citation is as complete and accurate as the available sources allow, or surface the ambiguity to the user.
+5. Load the local data files from this skill directory before formatting:
    - `data/journal-abbreviations.json`
    - `data/conference-abbreviations.json`
    - `data/publisher-templates.json`
-5. Apply IEEE formatting rules.
-6. Return the final references numbered as `[1]`, `[2]`, and so on in the chat response.
-7. When the user provided a file or asked for an output file, save the results to:
+6. Apply IEEE formatting rules.
+7. Return the final references numbered as `[1]`, `[2]`, and so on in the chat response.
+8. When the user provided a file or asked for an output file, save the results to:
    - `<input_basename>_ieee.docx` next to the source file, or
    - `ieee_citations.docx` in the current working directory for direct text
-8. Create the saved `.docx` with one justified paragraph per reference, using Times New Roman, italic journal and conference venue names, curly quotes around titles, en dashes for page ranges, and superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`.
+9. Create the saved `.docx` with one justified paragraph per reference, using Times New Roman, italic journal and conference venue names, curly quotes around titles, en dashes for page ranges, and superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`.
 
 ## Required Metadata
 
@@ -145,6 +150,7 @@ Rules:
 - Use `publisher-templates.json` for publisher-specific quirks such as article numbers or series formatting.
 - If a title maps to multiple possible works, surface the ambiguity and ask the user to choose.
 - Preserve input order when formatting multiple entries.
+- Treat author completeness, author-name order, publication date completeness, and dropped metadata as mandatory final checks before returning or saving the citations.
 
 ## Example
 
