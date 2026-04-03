@@ -2,6 +2,8 @@
 
 These instructions are designed to be followed by an LLM (e.g., Claude Code) to self-install the IEEE Citation Generator skill.
 
+After installation, the skill should save formatted citations as `.docx` files by default. The conversation output remains plain text, but the Word document is the canonical deliverable.
+
 ## Prerequisites
 
 - Claude Code CLI installed and configured
@@ -62,17 +64,17 @@ ls -la ~/.claude/skills/ieee-citation-generator.md
 ls -la ~/.claude/skills/ieee-citation-data/
 ```
 
-Expected output: 5 files total — 1 command `.md` file, 1 skill `.md` file, and 3 `.json` data files.
+Expected output: 5 files total - 1 command `.md` file, 1 skill `.md` file, and 3 `.json` data files.
 
 ### Step 6: Test the skill
 
 Invoke the skill by typing in Claude Code:
 
-```
+```text
 /ieee-cite Attention Is All You Need
 ```
 
-The skill should produce a properly formatted IEEE citation with full metadata.
+The skill should produce a properly formatted IEEE citation with full metadata in chat and save `ieee_citations.docx` in the working directory.
 
 ## Uninstallation
 
@@ -90,12 +92,13 @@ To update to the latest version, re-run Steps 2, 3, and 4. The files will be ove
 
 ## Troubleshooting
 
-- **Skill not appearing**: Ensure `~/.claude/commands/ieee-cite.md` exists (this registers the slash command). Restart Claude Code after installation
-- **Abbreviation data not loading**: Verify the data directory path matches `~/.claude/skills/ieee-citation-data/`
-- **curl fails**: Check your internet connection and ensure the GitHub repository is accessible
-- **Permission denied**: Run `chmod 644 ~/.claude/skills/ieee-citation-generator.md` and `chmod 644 ~/.claude/skills/ieee-citation-data/*.json`
+- **Skill not appearing**: Ensure `~/.claude/commands/ieee-cite.md` exists (this registers the slash command). Restart Claude Code after installation.
+- **Abbreviation data not loading**: Verify the data directory path matches `~/.claude/skills/ieee-citation-data/`.
+- **curl fails**: Check your internet connection and ensure the GitHub repository is accessible.
+- **Permission denied**: Run `chmod 644 ~/.claude/skills/ieee-citation-generator.md` and `chmod 644 ~/.claude/skills/ieee-citation-data/*.json`.
+- **Output opens with the wrong punctuation**: Open the generated `.docx` file instead of copying citations from a plain-text editor, since Word output preserves the intended quotes and dashes.
 
 ## Platform Notes
 
-- **macOS / Linux**: `~` expands to your home directory automatically
-- **Windows (Git Bash / WSL)**: `~` expands to `C:\Users\<username>` in Git Bash or `/home/<username>` in WSL. Claude Code on Windows uses `%USERPROFILE%\.claude\skills\`
+- **macOS / Linux**: `~` expands to your home directory automatically.
+- **Windows (Git Bash / WSL)**: `~` expands to `C:\Users\<username>` in Git Bash or `/home/<username>` in WSL. Claude Code on Windows uses `%USERPROFILE%\.claude\skills\`.
