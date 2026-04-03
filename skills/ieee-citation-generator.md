@@ -70,11 +70,14 @@ Load the abbreviation data from the skill's data directory:
 
 Apply the correct IEEE template based on citation type. Format the citations as plain text in the chat response, but save them to a `.docx` file as the canonical deliverable.
 
+Use curly quotes `“ ”` for titles and en dashes `–` for page ranges everywhere: instructions, examples, chat output, and the saved Word document.
+
 The saved Word document should format citations as follows:
 - Times New Roman for all citation text
 - fully justified paragraph alignment
 - one citation paragraph per reference
-- straight ASCII double quotes `"` around article and paper titles
+- curly quotation marks `“ ”` around article and paper titles, never straight ASCII `"` quotes
+- en dash `–` for page ranges, never hyphen `-`
 - italic journal and conference venue names only
 - superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th` wherever they appear, including conference ordinals and edition ordinals
 
@@ -82,25 +85,26 @@ These are Word-formatting requirements only. The chat response remains plain tex
 
 #### Journal Article
 ```text
-[N] A. B. Surname, C. D. Surname, and E. F. Surname, "Title of article," Abbrev. J. Name, vol. X, no. Y, pp. Z1-Z2, Mon. Year, doi: 10.xxxx/xxxxx.
+[N] A. B. Surname, C. D. Surname and E. F. Surname, “Title of article,” Abbrev. J. Name, vol. X, no. Y, pp. Z1–Z2, Mon. Year, doi: 10.xxxx/xxxxx.
 ```
 
 Rules:
 - Author names: first/middle initials then surname. E.g., "J. K. Smith"
 - Author "and" formatting depends on author count:
   - 1-3 authors: NO Oxford comma - "A. Smith, B. Jones and C. Lee"
+  - 3-author regression guard: correct `M. Cheng, P. Han and Z. Wu`; incorrect `M. Cheng, P. Han, and Z. Wu`
   - 4-6 authors: Oxford comma before "and" - "A. Smith, B. Jones, C. Lee, and D. Brown"
   - 7+ authors: list the first 6, then "et al."
-- Title in straight ASCII double quotes `"` and sentence case
+- Title in curly quotes `“ ”` and sentence case
 - Journal name abbreviated, not in quotes in the plain-text response, but italicized in the Word document
-- Use an en dash for page ranges in the saved Word document
+- Use an en dash for page ranges
 - If article number instead of pages: use `Art. no. XXXXX` instead of `pp.`
 - Do not include DOI for standard journal articles with volume, issue, and page/article metadata already present
 - Month abbreviations: Jan., Feb., Mar., Apr., May, Jun., Jul., Aug., Sep., Oct., Nov., Dec.
 
 #### Conference Paper
 ```text
-[N] A. B. Surname and C. D. Surname, "Title of paper," in Proc. Abbrev. Conf. Name, City, Country, Mon. Year, pp. Z1-Z2.
+[N] A. B. Surname and C. D. Surname, “Title of paper,” in Proc. Abbrev. Conf. Name, City, Country, Mon. Year, pp. Z1–Z2.
 ```
 
 Rules:
@@ -109,7 +113,7 @@ Rules:
 - Include month in the date field when it can be verified
 - Pages are optional, but include them when available
 - Do not include DOI for conference papers
-- Apply the same author-list punctuation rule as journal articles
+- Apply the same author-list punctuation rule as journal articles, including no Oxford comma for exactly 3 authors
 - Italicize the conference venue name in the Word document
 - Superscript ordinal suffixes such as `24th` or `8th` in the Word document
 
@@ -125,12 +129,12 @@ Rules:
 
 #### Book Chapter
 ```text
-[N] A. B. Surname, "Chapter title," in Title of Book, A. B. Editor, Ed. City, Country: Publisher, Year, pp. Z1-Z2.
+[N] A. B. Surname, “Chapter title,” in Title of Book, A. B. Editor, Ed. City, Country: Publisher, Year, pp. Z1–Z2.
 ```
 
 #### Website / Online Source
 ```text
-[N] A. B. Surname. "Page title." Website Name. URL (accessed Mon. Day, Year).
+[N] A. B. Surname. “Page title.” Website Name. URL (accessed Mon. Day, Year).
 ```
 
 Rules:
@@ -140,13 +144,13 @@ Rules:
 
 #### arXiv Preprint
 ```text
-[N] A. B. Surname and C. D. Surname, "Title," arXiv preprint arXiv:XXXX.XXXXX, Year.
+[N] A. B. Surname and C. D. Surname, “Title,” arXiv preprint arXiv:XXXX.XXXXX, Year.
 ```
 
 #### Standard / Patent
 ```text
 [N] Title of Standard, Standard Number, Organization, Year.
-[N] A. B. Surname, "Title of patent," Country Patent XXXXXXX, Mon. Day, Year.
+[N] A. B. Surname, “Title of patent,” Country Patent XXXXXXX, Mon. Day, Year.
 ```
 
 ### Step 6: Number and Output
@@ -158,7 +162,7 @@ Rules:
    - If input was direct text, save as `ieee_citations.docx` in the current working directory
    - Create a Word document with one citation paragraph per reference in input order
    - Use Times New Roman and justified paragraph alignment throughout
-   - Preserve straight double quotes around titles and the intended page-range dash glyph
+   - Preserve curly quotes around titles and en dashes in page ranges
    - Italicize journal and conference venue names only
    - Render ordinal suffixes `st`, `nd`, `rd`, and `th` as superscript wherever they appear
    - Treat the `.docx` file as the primary artifact even though the conversation response remains plain text
@@ -170,7 +174,7 @@ Rules:
 - Check `publisher-templates.json` for publisher-specific quirks (e.g., MDPI article numbers, Springer LNCS volume numbering)
 
 **Early access / in-press articles:**
-- Use `early access` after the journal name: `"Title," Abbrev. J. Name, early access, doi: 10.xxxx/xxxxx.`
+- Use `early access` after the journal name: `“Title,” Abbrev. J. Name, early access, doi: 10.xxxx/xxxxx.`
 - Early access articles are the only journal citation type that includes a DOI by default because they have no volume, issue, or pages yet
 
 **Multiple citations from one input:**
@@ -199,7 +203,7 @@ Attention Is All You Need
 
 **Output shown in chat:**
 ```text
-[1] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, et al., "Attention is all you need," in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS), Long Beach, CA, USA, Dec. 2017, pp. 5998-6008.
+[1] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, et al., “Attention is all you need,” in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS), Long Beach, CA, USA, Dec. 2017, pp. 5998–6008.
 ```
 
 **Saved file:**
@@ -216,9 +220,9 @@ https://pytorch.org/docs/stable/index.html
 
 **Output shown in chat:**
 ```text
-[1] K. He, X. Zhang, S. Ren, and J. Sun, "Deep residual learning for image recognition," in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, Jun. 2016, pp. 770-778.
-[2] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, "BERT: Pre-training of deep bidirectional transformers for language understanding," in Proc. Conf. North Amer. Ch. Assoc. Comput. Linguist.: Hum. Lang. Technol. (NAACL-HLT), Minneapolis, MN, USA, Jun. 2019, pp. 4171-4186.
-[3] "PyTorch documentation." PyTorch. https://pytorch.org/docs/stable/index.html (accessed Apr. 3, 2026).
+[1] K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning for image recognition,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, Jun. 2016, pp. 770–778.
+[2] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, “BERT: Pre-training of deep bidirectional transformers for language understanding,” in Proc. Conf. North Amer. Ch. Assoc. Comput. Linguist.: Hum. Lang. Technol. (NAACL-HLT), Minneapolis, MN, USA, Jun. 2019, pp. 4171–4186.
+[3] “PyTorch documentation.” PyTorch. https://pytorch.org/docs/stable/index.html (accessed Apr. 3, 2026).
 ```
 
 **Saved file:**
