@@ -4,26 +4,29 @@ An IEEE citation skill package that supports both Claude Code and Codex. It gene
 
 ## Platform Support
 
-- **Claude Code**: supported through the slash command in `commands/ieee-cite.md` plus the Claude-oriented skill file in `skills/ieee-citation-generator.md`
-- **Codex**: supported through the packaged Codex skill directory in `codex/ieee-citation-generator/`
+- Claude Code: supported through the slash command in `commands/ieee-cite.md` plus the Claude-oriented skill file in `skills/ieee-citation-generator.md`
+- Codex: supported through the packaged Codex skill directory in `codex/ieee-citation-generator/`
 
 ## LLM Installation
 
-> **For AI assistants**: To install this repository, fetch and follow the instructions at:
-> ```
-> https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/installation.md
-> ```
-> Then choose the Claude Code or Codex installation section that matches your environment.
+For AI assistants, install by following:
+
+```text
+https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/installation.md
+```
+
+Then choose the Claude Code or Codex installation section that matches your environment.
 
 ## What It Does
 
 - Takes paper titles, partial citations, or messy reference text as input
 - Uses the title as the primary anchor and verifies metadata from search results before formatting
-- Looks up or re-checks metadata (authors, year, DOI, volume, pages) via web search
+- Rebuilds the authoritative IEEE author list instead of trusting truncated input author strings
+- Looks up or re-checks metadata such as authors, year, DOI, volume, and pages via web search
 - Formats everything in correct IEEE citation style
 - Handles journal articles, conference papers, books, websites, and arXiv preprints
-- Uses standard IEEE abbreviations (e.g., "IEEE Trans. Power Electron.", "in Proc. IEEE Int. Conf. Elect. Mach. Drives")
-- Works with non-IEEE publishers (ACM, Elsevier, Springer, etc.) while still formatting in IEEE style
+- Uses standard IEEE abbreviations such as `IEEE Trans. Power Electron.` and `in Proc. IEEE Int. Conf. Elect. Mach. Drives`
+- Works with non-IEEE publishers while still formatting in IEEE style
 - Saves formatted citations to a `.docx` file by default so Word preserves IEEE-required punctuation and formatting reliably
 
 ## Usage
@@ -54,38 +57,34 @@ Format these references in IEEE style and save the result as a Word document.
 
 The batch file can be any readable plain-text citation list, but `.txt` remains the recommended format for inputs.
 
-Where `my-references.txt` contains one citation per line:
-
-```text
-Deep Residual Learning for Image Recognition
-BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding
-https://pytorch.org/docs/stable/index.html
-```
-
-### Output
+## Output
 
 Formatted citations are shown in chat as plain text and saved to a `.docx` file:
 
 ```text
 [1] K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning for image recognition,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, Jun. 2016, pp. 770–778.
+
 [2] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, “BERT: Pre-training of deep bidirectional transformers for language understanding,” in Proc. Conf. North Amer. Ch. Assoc. Comput. Linguist.: Hum. Lang. Technol. (NAACL-HLT), Minneapolis, MN, USA, Jun. 2019, pp. 4171–4186.
+
 [3] “PyTorch documentation.” PyTorch. https://pytorch.org/docs/stable/index.html (accessed Apr. 3, 2026).
 ```
 
 Saved file names:
+
 - Direct input -> `ieee_citations.docx`
 - File input -> `<input_basename>_ieee.docx`
 
 The saved Word document should format each citation as:
-- one justified paragraph per citation
-- visible spacing between citation paragraphs
+
+- One justified paragraph per citation
+- Visible spacing between citation paragraphs
 - Times New Roman for all text
-- curly quotation marks `“ ”` around article and paper titles
-- en dash `–` for page ranges, never hyphen `-`
-- italic journal and conference venue names only
-- superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`
-- never substitute `?` for quotation marks or page-range dashes
-- use exactly one space between the closing title quote and the following venue text
+- Curly quotation marks `“ ”` around article and paper titles
+- En dash `–` for page ranges, never hyphen `-`
+- Italic journal and conference venue names only
+- Superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`
+- Never substitute `?` for quotation marks or page-range dashes
+- Use exactly one space between the closing title quote and the following venue text
 
 The chat response should also keep a blank line between adjacent references so they do not run together visually.
 
@@ -94,11 +93,11 @@ Word output is the default because many plain-text editors and clipboard paths s
 ## Supported Citation Types
 
 | Type | Example Source |
-|------|--------------|
-| Journal article | IEEE Trans., ACM Trans., Nature, Science, Elsevier journals |
+|---|---|
+| Journal article | IEEE Transactions, ACM Transactions, Nature, Science, Elsevier journals |
 | Conference paper | IEEE ECCE, CVPR, NeurIPS, ICML, ICLR |
 | Book | Any publisher |
-| Book chapter | Springer LNCS, etc. |
+| Book chapter | Springer LNCS and similar series |
 | Website | Any URL |
 | arXiv preprint | arXiv.org papers |
 | Standard | IEEE, ISO, IEC standards |
@@ -110,24 +109,15 @@ Word output is the default because many plain-text editors and clipboard paths s
 - `skills/ieee-citation-generator.md` - Claude Code skill instructions
 - `codex/ieee-citation-generator/SKILL.md` - Codex skill instructions
 - `data/` - shared abbreviation and formatting data for both platforms
+- `tests/test-cases.md` - manual regression scenarios
+- `tests/test_skill_regressions.py` - automated prompt-package regression checks
 
-## Abbreviation Coverage
+## Regression Notes
 
-The skill includes abbreviation tables for:
-- **100+ IEEE journal names** (all major IEEE Transactions, Journals, Letters, Magazines)
-- **30+ major conferences** (IEEE, ACM, NeurIPS, ICML, etc.)
-- **100+ word-level abbreviation rules** for composing abbreviations for unknown venues
-- **15+ publisher-specific formatting quirks** (ACM, Elsevier, Springer, MDPI, etc.)
+Two important regressions are now explicitly guarded:
 
-### Extending Abbreviations
-
-To add custom abbreviations:
-- Claude Code installs use `~/.claude/skills/ieee-citation-data/`
-- Codex installs use `~/.codex/skills/ieee-citation-generator/data/`
-
-Edit:
-- `journal-abbreviations.json` - add `"Full Name": "Abbrev. Name"` entries
-- `conference-abbreviations.json` - add to `full_conference_names` or `word_abbreviations`
+1. Punctuation corruption such as `?Incorporating skew...` or `pp. 816?818` must be normalized to `“Incorporating skew...` and `pp. 816–818`.
+2. Truncated author lists such as the Ref. 16 example must be rebuilt from authoritative metadata, yielding `J. Chen, W. Hua, L. Shao and Z. Wu`.
 
 ## Manual Installation
 
@@ -143,40 +133,22 @@ Edit:
 2. Copy `codex/ieee-citation-generator/SKILL.md` into that directory as `SKILL.md`
 3. Copy the `data/` directory into `~/.codex/skills/ieee-citation-generator/data/`
 
-```bash
-# Clone the repo
-git clone https://github.com/Zwl20085/ieee-citation-generator.git
-cd ieee-citation-generator
-
-# Claude Code install
-mkdir -p ~/.claude/commands ~/.claude/skills/ieee-citation-data
-cp commands/ieee-cite.md ~/.claude/commands/
-cp skills/ieee-citation-generator.md ~/.claude/skills/
-cp data/*.json ~/.claude/skills/ieee-citation-data/
-
-# Codex install
-mkdir -p ~/.codex/skills/ieee-citation-generator/data
-cp codex/ieee-citation-generator/SKILL.md ~/.codex/skills/ieee-citation-generator/SKILL.md
-cp data/*.json ~/.codex/skills/ieee-citation-generator/data/
-```
-
 ## IEEE Citation Format Reference
 
-This skill follows the [IEEE Reference Guide](https://ieeeauthorcenter.ieee.org/wp-content/uploads/IEEE-Reference-Guide.pdf) for formatting. Key rules:
+This skill follows the [IEEE Reference Guide](https://ieeeauthorcenter.ieee.org/wp-content/uploads/IEEE-Reference-Guide.pdf). Key rules:
 
-- Author names: initials before surname (e.g., "J. K. Smith")
-- No Oxford comma for 1-3 authors; use `M. Cheng, P. Han and Z. Wu`, not `M. Cheng, P. Han, and Z. Wu`
-- Oxford comma before `and` for 4-6 authors; `et al.` for 7+ authors
-- Article titles in curly quotes, sentence case
-- Use exactly one space after the closing title quote before the following venue text
-- Journal and conference names abbreviated per IEEE standards
-- En dash for page ranges everywhere
+- Author names use initials before surnames
+- No Oxford comma for 1 to 3 authors
+- Oxford comma before `and` for 4 to 6 authors
+- Use `et al.` for 7 or more authors
+- Article titles use curly quotes and sentence case
+- Use exactly one space after the closing title quote before the venue text
+- Journal and conference names are abbreviated per IEEE standards
+- En dash is required for page ranges everywhere
 - Saved Word output uses Times New Roman and justified paragraphs
 - Journal and conference venue names are italicized in the Word document
 - Ordinal suffixes such as `st`, `nd`, `rd`, and `th` are superscripted in the Word document
 - If punctuation degrades into `?` or mojibake, normalize it to curly quotes and en dashes before returning or saving the citation
-- DOI formatted as `doi: 10.xxxx/xxxxx.`
-- Month abbreviations: Jan., Feb., Mar., Apr., May, Jun., Jul., Aug., Sep., Oct., Nov., Dec.
 
 ## License
 

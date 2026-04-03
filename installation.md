@@ -149,17 +149,18 @@ To update to the latest version, re-run the relevant download steps for your pla
 
 ## Troubleshooting
 
-- **Claude skill not appearing**: Ensure `~/.claude/commands/ieee-cite.md` exists and restart Claude Code if needed.
-- **Codex skill not appearing**: Ensure `~/.codex/skills/ieee-citation-generator/SKILL.md` exists in a folder named after the skill.
-- **Abbreviation data not loading**: Verify the platform-specific data directory path matches the instructions above.
-- **curl fails**: Check your internet connection and ensure the GitHub repository is accessible.
-- **Permission denied**: Ensure the installed files are readable by your current user.
-- **Output opens with the wrong formatting**: Open the generated `.docx` file in Word and verify Times New Roman, justification, curly quotes, en dashes, venue italics, and superscript ordinal suffixes rather than relying on a plain-text editor preview.
-- **Output shows `?` instead of quotes or page dashes**: Treat that as punctuation corruption. Replace the affected characters with curly quotes `“ ”` and en dashes `–`, then verify the corrected citation before returning it.
+- Claude skill not appearing: Ensure `~/.claude/commands/ieee-cite.md` exists and restart Claude Code if needed.
+- Codex skill not appearing: Ensure `~/.codex/skills/ieee-citation-generator/SKILL.md` exists in a folder named after the skill.
+- Abbreviation data not loading: Verify the platform-specific data directory path matches the instructions above.
+- `curl` fails: Check your internet connection and ensure the GitHub repository is accessible.
+- Permission denied: Ensure the installed files are readable by your current user.
+- Output opens with the wrong formatting: Open the generated `.docx` file in Word and verify Times New Roman, justification, curly quotes, en dashes, venue italics, and superscript ordinal suffixes rather than relying on a plain-text editor preview.
+- Output shows `?` instead of quotes or page dashes: Treat that as punctuation corruption. Replace the affected characters with curly quotes `“ ”` and en dashes `–`, then verify the corrected citation before returning it.
+- Output seems to drop authors: Re-run the metadata verification from the title match and rebuild the author list from the authoritative source before returning the citation.
 
 ## Platform Notes
 
-- **macOS / Linux**: `~` expands to your home directory automatically.
-- **Windows (Git Bash / WSL)**: `~` expands to your user home directory for either toolchain.
-- **Claude Code on Windows**: typically uses `%USERPROFILE%\.claude\`.
-- **Codex on Windows**: typically uses `%USERPROFILE%\.codex\`.
+- macOS and Linux: `~` expands to your home directory automatically.
+- Windows (Git Bash or WSL): `~` expands to your user home directory for either toolchain.
+- Claude Code on Windows typically uses `%USERPROFILE%\\.claude\\`.
+- Codex on Windows typically uses `%USERPROFILE%\\.codex\\`.

@@ -1,263 +1,217 @@
 # IEEE Citation Generator
 
-Generate properly formatted IEEE transaction-style citations from paper titles, raw citation text, or plain-text citation files.
+Generate properly formatted IEEE transaction-style citations from paper titles, raw citation text, URLs, or plain-text citation files, then save the final references to a Word document.
 
 ## Trigger
 
-When the user invokes `/ieee-cite` followed by either:
-- A paper title or citation text (direct input)
-- A path to a readable plain-text citation list file containing one or more citations (one per line is the default assumption)
+Use this skill when the user invokes `/ieee-cite`, asks for IEEE-formatted references, mentions `ieee-citation-generator`, or wants a citation file converted into IEEE style.
 
-## Instructions
+## Inputs
 
-You are an IEEE citation formatting expert. Your task is to take the user's input and produce correctly formatted IEEE-style references. Follow these steps precisely.
+- Direct text: one title, one citation, one URL, or several entries separated by blank lines or numbering
+- File path: a readable plain-text citation list file containing one citation per non-empty line
 
-### Step 1: Parse Input
+## Workflow
 
-Determine the input type:
+### Step 1: Parse input
 
-1. **File path**: If the input looks like a file path (contains `/`, `\`, or ends with `.txt`), read the file using the Read tool. Each non-empty line is a separate citation to process.
-   - Prefer `.txt` examples in documentation, but accept other readable plain-text list files when the contents are clearly citation text.
-2. **Direct text**: Otherwise, treat the entire input as one or more citation entries. If multiple citations are provided (separated by blank lines or numbered), process each separately.
+1. If the input looks like a readable file path, read the file and treat each non-empty line as a separate citation entry.
+2. Otherwise, treat the input as one or more direct citation entries.
 
-### Step 2: Classify Each Entry
+### Step 2: Classify each entry
 
-For each citation entry, determine what you're working with:
+For each citation entry, determine which case applies:
 
-- **Title only**: Just a paper/article title with no other metadata -> needs full web lookup
-- **Partial citation**: Has some fields (e.g., author and title, but no volume/pages) -> needs supplemental lookup
-- **Full citation needing reformatting**: Has all fields but not in IEEE format -> reformat directly
-- **Already IEEE formatted**: Verify correctness and fix any issues
+- Title only: perform a web lookup for full metadata
+- Partial citation: fill in missing metadata with targeted lookup
+- Full citation in another style: verify and reformat into IEEE
+- Already IEEE-like: verify correctness and repair any problems
 
-Treat the title as the authoritative anchor for the work. Even if the input already includes authors, venue, year, volume, issue, pages, or DOI, verify those fields against the title match instead of trusting them blindly.
+Treat the title as the authoritative anchor for the work. Do not trust the input author list, venue, date, volume, issue, pages, article number, or DOI without checking them against the best title match.
 
-### Step 3: Resolve Missing Metadata
+### Step 3: Resolve metadata carefully
 
-If any required fields are missing, use web search to find them. Even when fields are already present, re-check them from the title because the input metadata may be incomplete or wrong.
+Search strategy:
 
-**Required fields by citation type:**
+1. Search the exact title first.
+2. Use the title match to verify or replace the author list and author order, publication date, venue title, volume, issue, pages or article number, and DOI when applicable.
+3. If needed, search the title plus an author name.
+4. Use DOI pages directly when available.
+5. For arXiv works, check `arxiv.org` directly.
 
-| Type | Required Fields |
-|------|----------------|
-| Journal | Authors, title, journal name, volume, number/issue, pages or article number, month, year |
-| Conference | Authors, title, conference name, city, country, month, year, pages (if available) |
-| Book | Authors/editors, title, edition (if not 1st), city, country, publisher, year |
-| Website | Author (if available), page title, website name, URL, access date |
+Author completeness is mandatory:
 
-**Search strategy:**
-1. First, try searching for the exact paper title with quotes
-2. Use the title match to verify or replace the author list and order, publication date, venue title, volume, issue, pages or article number, and DOI when applicable
-3. If that fails, search for title + key author name
-4. Use DOI-based lookup if a DOI is found (fetch `https://doi.org/` + DOI or search CrossRef)
-5. For arXiv papers, check `arxiv.org` directly
+- Never keep a shortened or truncated input author list if the authoritative title match contains additional authors.
+- If the input says `et al.` or lists only some authors, replace it with the correct IEEE author list built from the authoritative source.
+- If the title match disagrees with the input author order, use the authoritative order.
+- Before returning or saving the citation, explicitly verify that no author names were dropped during formatting.
 
-**IMPORTANT**: When web search returns results, verify the result matches the intended paper (check title similarity, not just partial matches). If uncertain, present the found metadata to the user and ask for confirmation.
+### Step 4: Final verification pass
 
-### Step 4: Final Verification Pass
+After generating each reference, re-check the result before returning or saving it.
 
-After generating each reference, re-check the result before returning it.
+- Re-check the author list and author order against the best available source.
+- Prefer the title match over the input metadata whenever they disagree.
+- Confirm the publication date is complete and correctly reflected in the citation.
+- Check whether any information was lost during formatting, such as missing authors, pages, article numbers, venue details, city, country, month, or year.
+- Confirm there is exactly one space after the reference number before the citation text.
+- Confirm there is exactly one space between the closing title quote and the following journal, conference, book, or website text.
+- If punctuation degrades into `?`, replacement glyphs, or mojibake, normalize it before returning or saving the citation.
+- Treat a lone `?` as punctuation corruption only when context shows it is standing in for an opening quote, a closing quote, or a page-range dash.
+- Do not leave placeholder `?` characters in the final citation where `“`, `”`, or `–` should appear.
 
-- Re-check the author list and author-name order against the best available source
-- Prefer the title match over the input metadata whenever they disagree
-- Confirm the publication date is complete and correctly reflected in the citation
-- Check whether any information was lost during formatting, such as missing authors, pages, article numbers, venue details, city/country, month, or year
-- Confirm there is exactly one space after the reference number before the citation text
-- Confirm there is exactly one space between the closing title quote and the following journal, conference, book, or website text
-- If quotes, dashes, or apostrophes degrade into `?`, replacement glyphs, or other mojibake, normalize them before returning or saving the citation
-- If the web result is incomplete or conflicting, continue searching until the citation is as complete and accurate as the available sources allow, or surface the ambiguity to the user
+### Step 5: Load local data files
 
-### Step 5: Apply Abbreviations
+Load these files before formatting:
 
-Load the abbreviation data from the skill's data directory:
-- `journal-abbreviations.json` - for journal name lookup
-- `conference-abbreviations.json` - for conference name lookup (full names + word-level rules)
+- `~/.claude/skills/ieee-citation-data/journal-abbreviations.json`
+- `~/.claude/skills/ieee-citation-data/conference-abbreviations.json`
+- `~/.claude/skills/ieee-citation-data/publisher-templates.json`
 
-**Journal abbreviation process:**
-1. Check if the full journal name exists in `journal-abbreviations.json` -> use the mapped abbreviation
-2. If not found, attempt word-by-word abbreviation using `conference-abbreviations.json` -> `word_abbreviations`
-3. If still uncertain, use your knowledge of IEEE abbreviation conventions (ISO 4 / LTWA)
+### Step 6: Apply IEEE formatting rules
 
-**Conference abbreviation process:**
-1. Check if the full conference name exists in `conference-abbreviations.json` -> `full_conference_names`
-2. If not found, abbreviate each word using `word_abbreviations` from the same file
-3. Keep proper nouns, acronyms, and short words (<=4 letters like "and", "of", "for", "the", "on", "in") while dropping articles ("the", "a", "an") where appropriate
+Return citations as plain text in chat. Save the canonical deliverable as a `.docx` file.
 
-### Step 6: Format Citations
+Apply these spacing rules everywhere:
 
-Apply the correct IEEE template based on citation type. Format the citations as plain text in the chat response, but save them to a `.docx` file as the canonical deliverable.
-
-Apply these punctuation rules everywhere: instructions, examples, chat output, and the saved `.docx`.
-
-Apply these spacing rules everywhere as well:
-- Use exactly one space between the reference number and the citation text
-- Use exactly one space between the closing title quote and the following journal, conference, book, or website text
-- When returning multiple references in chat, separate them with a blank line
-- In the saved Word document, keep one citation paragraph per reference and leave visible paragraph spacing between references
+- Use exactly one space between the reference number and the citation text.
+- Use exactly one space between the closing title quote and the following journal, conference, book, or website text.
+- When returning multiple references in chat, separate them with a blank line.
+- In the saved Word document, keep one citation paragraph per reference and leave visible paragraph spacing between references.
 
 The saved Word document should format citations as follows:
+
 - Times New Roman for all citation text
-- fully justified paragraph alignment
-- one citation paragraph per reference
-- curly quotation marks `“ ”` around article and paper titles, never straight ASCII `"` quotes
-- en dash `–` for page ranges, never hyphen `-`
-- italic journal and conference venue names only
-- superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th` wherever they appear, including conference ordinals and edition ordinals
-- never emit `?` as a substitute for quotation marks, dashes, or other punctuation
+- Fully justified paragraph alignment
+- One citation paragraph per reference
+- Curly quotation marks `“ ”` around article and paper titles, never straight ASCII `"` quotes
+- En dash `–` for page ranges, never hyphen `-`
+- Italic journal and conference venue names only
+- Superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th` wherever they appear
+- Never emit `?` as a substitute for quotation marks, dashes, or other punctuation
+- Never collapse the post-title space; forms like `,”IEEE` are invalid and must be `,” IEEE`
 
-These are Word-formatting requirements only. The chat response remains plain text and does not need to show italics, superscript, or paragraph justification, but it should still preserve the required spaces and use a blank line between adjacent references.
+#### Journal article
 
-#### Journal Article
 ```text
-[N] A. B. Surname, C. D. Surname and E. F. Surname, “Title of article,” Abbrev. J. Name, vol. X, no. Y, pp. Z1–Z2, Mon. Year, doi: 10.xxxx/xxxxx.
+[N] A. B. Surname, C. D. Surname and E. F. Surname, “Title of article,” Abbrev. J. Name, vol. X, no. Y, pp. Z1–Z2, Mon. Year.
 ```
 
 Rules:
-- Author names: first/middle initials then surname. E.g., "J. K. Smith"
-- Author "and" formatting depends on author count:
-  - 1-3 authors: NO Oxford comma - "A. Smith, B. Jones and C. Lee"
-  - 3-author regression guard: correct `M. Cheng, P. Han and Z. Wu`; incorrect `M. Cheng, P. Han, and Z. Wu`
-  - 4-6 authors: Oxford comma before "and" - "A. Smith, B. Jones, C. Lee, and D. Brown"
-  - 7+ authors: list the first 6, then "et al."
-- Title in curly quotation marks `“ ”` and sentence case
-- Title in curly quotation marks `“ ”` and sentence case
-- Journal name abbreviated, not in quotes in the plain-text response, but italicized in the Word document
-- Use an en dash for page ranges
-- If article number instead of pages: use `Art. no. XXXXX` instead of `pp.`
-- Do not include DOI for standard journal articles with volume, issue, and page/article metadata already present
-- Month abbreviations: Jan., Feb., Mar., Apr., May, Jun., Jul., Aug., Sep., Oct., Nov., Dec.
 
-#### Conference Paper
+- Format authors as initials plus surname.
+- For 1 to 3 authors, do not use an Oxford comma before `and`.
+- The 3-author form must be `M. Cheng, P. Han and Z. Wu`, not `M. Cheng, P. Han, and Z. Wu`.
+- For 4 to 6 authors, use an Oxford comma before `and`.
+- For 7 or more authors, list the first 6, then `et al.`
+- Always use curly quotes `“ ”` around article and paper titles.
+- Always use an en dash `–` for page ranges.
+- Use article numbers as `Art. no. XXXXX` when pages are unavailable.
+- Include a DOI only for early-access journal articles with no volume, issue, or pages yet.
+- Italicize the journal venue name in the Word document.
+
+#### Conference paper
+
 ```text
 [N] A. B. Surname and C. D. Surname, “Title of paper,” in Proc. Abbrev. Conf. Name, City, Country, Mon. Year, pp. Z1–Z2.
 ```
 
 Rules:
+
 - Always include `in Proc.`
-- Include city and country
-- Include month in the date field when it can be verified
-- Pages are optional, but include them when available
-- Do not include DOI for conference papers
-- Apply the same author-list punctuation rule as journal articles, including no Oxford comma for exactly 3 authors
-- Italicize the conference venue name in the Word document
-- Superscript ordinal suffixes such as `24th` or `8th` in the Word document
+- Include city, country, and month when they can be verified.
+- Do not include DOI for conference papers.
+- Apply the same author-list punctuation rule as journal articles, including no Oxford comma for 3 authors.
+- Italicize the conference venue name in the Word document.
+- Superscript ordinal suffixes such as `24th` or `8th` in the Word document.
 
 #### Book
+
 ```text
 [N] A. B. Surname, Title of Book, Xth ed. City, Country: Publisher, Year.
 ```
 
 Rules:
-- Book title is not in quotes
-- Include edition only if not the first edition
-- Superscript ordinal suffixes such as `2nd ed.` or `3rd ed.` in the Word document
 
-#### Book Chapter
+- Superscript ordinal suffixes such as `2nd ed.` or `3rd ed.` in the Word document.
+
+#### Book chapter
+
 ```text
 [N] A. B. Surname, “Chapter title,” in Title of Book, A. B. Editor, Ed. City, Country: Publisher, Year, pp. Z1–Z2.
 ```
 
-#### Website / Online Source
+#### Website
+
 ```text
 [N] A. B. Surname. “Page title.” Website Name. URL (accessed Mon. Day, Year).
 ```
 
-Rules:
-- If no author is available, start with the organization name or page title
-- Use today's date for access date if not specified
-- URL is bare, not wrapped in angle brackets
+#### arXiv preprint
 
-#### arXiv Preprint
 ```text
 [N] A. B. Surname and C. D. Surname, “Title,” arXiv preprint arXiv:XXXX.XXXXX, Year.
 ```
 
-#### Standard / Patent
-```text
-[N] Title of Standard, Standard Number, Organization, Year.
-[N] A. B. Surname, “Title of patent,” Country Patent XXXXXXX, Mon. Day, Year.
-```
-
-### Step 7: Number and Output
+### Step 7: Number and output
 
 1. Number citations sequentially as `[1]`, `[2]`, `[3]`, and so on.
-2. Display all formatted citations to the user in the conversation as plain text, with a blank line between references.
+2. Display all formatted citations to the user in plain text, with a blank line between references.
 3. Save the formatted citations to a `.docx` file:
-   - If input was a file (e.g., `input.txt`), save as `input_ieee.docx` in the same directory
-   - If input was direct text, save as `ieee_citations.docx` in the current working directory
-   - Create a Word document with one citation paragraph per reference in input order
-   - Use Times New Roman and justified paragraph alignment throughout
-   - Add paragraph spacing between citation paragraphs so adjacent references do not visually run together
-   - Preserve curly quotation marks around titles and en dashes for page ranges
-   - Add paragraph spacing between citation paragraphs so adjacent references do not visually run together
-   - Preserve curly quotation marks around titles and en dashes for page ranges
-   - Italicize journal and conference venue names only
-   - Render ordinal suffixes `st`, `nd`, `rd`, and `th` as superscript wherever they appear
-   - Treat the `.docx` file as the primary artifact even though the conversation response remains plain text
+   - If input was a file such as `input.txt`, save as `input_ieee.docx` in the same directory.
+   - If input was direct text, save as `ieee_citations.docx` in the current working directory.
 4. Before returning or saving the citations, confirm that no author names, publication-date fields, or other verified metadata were dropped during reformatting.
 
-### Special Handling
+## Special handling
 
-**Non-IEEE sources (ACM, Elsevier, Springer, etc.):**
-- Still format in IEEE style - IEEE citation format applies to all references in an IEEE paper, regardless of publisher
-- Check `publisher-templates.json` for publisher-specific quirks (e.g., MDPI article numbers, Springer LNCS volume numbering)
+- Render all sources in IEEE style regardless of original publisher.
+- Use `publisher-templates.json` for publisher-specific quirks such as article numbers or series formatting.
+- If a title maps to multiple possible works, surface the ambiguity and ask the user to choose.
+- Preserve input order when formatting multiple entries.
 
-**Early access / in-press articles:**
-- Use `early access` after the journal name: `“Title,” Abbrev. J. Name, early access, doi: 10.xxxx/xxxxx.`
-- Early access articles are the only journal citation type that includes a DOI by default because they have no volume, issue, or pages yet
+## Regression checkpoints
 
-**Multiple citations from one input:**
-- Number them sequentially
-- Keep the same order as input
+These regressions must be corrected if they appear in user input or intermediate output:
 
-**Ambiguous input:**
-- If a title matches multiple papers, present the options to the user and ask which one
-- If the entry could be either a journal or conference paper, verify the venue before formatting
+```text
+[15] R. Wang, S. Pekarek, P. O'Regan, A. Larson, and R. van Maaren, “Incorporating skew in a magnetic equivalent circuit model of synchronous machines,” IEEE Trans. Energy Convers., vol. 30, no. 2, pp. 816–818, Jun. 2015.
 
-### Data File Locations
+[16] J. Chen, W. Hua, L. Shao and Z. Wu, “Modified magnetic equivalent circuit of double-stator single-rotor axial flux permanent magnet machine considering stator radial-end flux-leakage,” IET Elect. Power Appl., vol. 18, no. 2, pp. 195–207, 2024.
+```
 
-When installed, the data files are at:
-- `~/.claude/skills/ieee-citation-data/journal-abbreviations.json`
-- `~/.claude/skills/ieee-citation-data/conference-abbreviations.json`
-- `~/.claude/skills/ieee-citation-data/publisher-templates.json`
+Never return the broken forms below:
 
-Read these files at the start of citation formatting to load abbreviation mappings.
+```text
+[15] ... ?Incorporating skew ... pp. 816?818 ...
+[16] ... J. Chen ... “Modified magnetic equivalent circuit ...” ...
+```
 
-### Example
+The second broken form is invalid because it dropped authors that are present in the authoritative source.
 
-**Input:**
+## Example
+
+Input:
+
 ```text
 Attention Is All You Need
 ```
 
-**Output shown in chat:**
+Output shown in chat:
+
 ```text
 [1] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, et al., “Attention is all you need,” in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS), Long Beach, CA, USA, Dec. 2017, pp. 5998–6008.
 ```
 
-**Saved file:**
-`ieee_citations.docx`
+Saved file:
 
-In the Word document, the paragraph should be justified, use Times New Roman, italicize `Adv. Neural Inf. Process. Syst. (NeurIPS)`, and superscript any ordinal suffixes if present.
-
-**Input (file with multiple entries):**
 ```text
-Deep Residual Learning for Image Recognition
-BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding
-https://pytorch.org/docs/stable/index.html
+ieee_citations.docx
 ```
 
-**Output shown in chat:**
-```text
-[1] K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning for image recognition,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, Jun. 2016, pp. 770–778.
-[2] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, “BERT: Pre-training of deep bidirectional transformers for language understanding,” in Proc. Conf. North Amer. Ch. Assoc. Comput. Linguist.: Hum. Lang. Technol. (NAACL-HLT), Minneapolis, MN, USA, Jun. 2019, pp. 4171–4186.
-[3] “PyTorch documentation.” PyTorch. https://pytorch.org/docs/stable/index.html (accessed Apr. 3, 2026).
-```
+In the Word document, the paragraph should be justified, use Times New Roman, italicize the venue name, and superscript ordinal suffixes where present.
 
-**Saved file:**
-`input_ieee.docx`
+## Tools
 
-## Tools Used
-
-- **Read**: To read input citation files and data JSON files
-- **WebSearch / WebFetch**: To look up missing citation metadata
-- **Document-capable write tool**: To save the formatted output `.docx` file
+- Use local file reads for input files and JSON data files.
+- Use web search only to fill or verify missing citation metadata.
+- Create an output `.docx` file when the user asks for one or provides a source citation file.

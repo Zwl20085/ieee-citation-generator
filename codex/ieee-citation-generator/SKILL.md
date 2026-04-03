@@ -13,7 +13,7 @@ Use this skill when the user asks for IEEE citations, mentions `ieee-citation-ge
 
 ## Inputs
 
-- Direct text: one title, one citation, or several entries separated by blank lines or numbering
+- Direct text: one title, one citation, one URL, or several entries separated by blank lines or numbering
 - File path: a readable plain-text citation file containing one citation per non-empty line
 
 ## Workflow
@@ -23,24 +23,27 @@ Use this skill when the user asks for IEEE citations, mentions `ieee-citation-ge
    - Otherwise, treat the input as direct citation text.
 2. Classify each entry.
    - Title only: perform a web lookup for full metadata.
-   - Partial citation: fill in missing fields with targeted web lookup.
-   - Full citation in another style: reformat into IEEE.
+   - Partial citation: fill in missing metadata with targeted lookup.
+   - Full citation in another style: verify and reformat into IEEE.
    - Already IEEE-like: verify and correct.
-   - Treat the title as the authoritative anchor. Do not trust input authors, venue, date, volume, issue, pages, or DOI without checking them against the title match.
+   - Treat the title as the authoritative anchor. Do not trust input authors, venue, date, volume, issue, pages, article number, or DOI without checking them against the best title match.
 3. Resolve missing metadata carefully.
    - Search the exact title first.
    - Use the title match to verify or replace the author list and order, publication date, venue title, volume, issue, pages or article number, and DOI when applicable.
-   - If needed, search title plus an author name.
+   - If needed, search the title plus an author name.
    - Use DOI or arXiv pages directly when available.
    - Verify the result matches the intended work before formatting.
+   - Never keep a shortened or truncated input author list if the authoritative title match contains additional authors.
+   - If the input says `et al.` or lists only some authors, rebuild the correct IEEE author list from the authoritative source.
 4. After generating each reference, run a final verification pass.
    - Re-check the author list and author-name order against the best available source.
    - Prefer the title match over the input metadata whenever they disagree.
    - Confirm the publication date is complete and correctly reflected in the citation.
-   - Check whether any information was lost during formatting, such as missing authors, pages, article numbers, venue details, city/country, month, or year.
+   - Check whether any information was lost during formatting, such as missing authors, pages, article numbers, venue details, city, country, month, or year.
    - Check that there is exactly one space after the reference number and exactly one space between the closing title quote and the following journal, conference, book, or website text.
    - If quotes, dashes, or apostrophes degrade into `?`, replacement glyphs, or other mojibake, normalize them before returning or saving the citation.
-   - If the web result is incomplete or conflicting, continue searching until the citation is as complete and accurate as the available sources allow, or surface the ambiguity to the user.
+   - Treat a lone `?` as punctuation corruption only when it is standing in for an opening quote, a closing quote, or a page-range dash.
+   - Never leave placeholder `?` characters in the final citation where `“`, `”`, or `–` should appear.
 5. Load the local data files from this skill directory before formatting:
    - `data/journal-abbreviations.json`
    - `data/conference-abbreviations.json`
@@ -81,23 +84,26 @@ Use this skill when the user asks for IEEE citations, mentions `ieee-citation-ge
 
 Return citations as plain text in chat. Save the canonical deliverable as a `.docx` file.
 
-Apply these punctuation rules everywhere: instructions, examples, chat output, and the saved `.docx`.
+Apply these punctuation rules everywhere: instructions, examples, chat output, and the saved `.docx` file.
 
 Apply these spacing rules everywhere as well:
+
 - Use exactly one space between the reference number and the citation text.
 - Use exactly one space between the closing title quote and the following journal, conference, book, or website text.
 - When returning multiple references in chat, separate them with a blank line.
 - In the saved Word document, keep one citation paragraph per reference and leave visible paragraph spacing between references.
+
 The saved Word document should format citations as:
+
 - Times New Roman for all citation text
-- fully justified paragraph alignment
-- one citation paragraph per reference
-- curly quotation marks `“ ”` around article and paper titles, never straight ASCII `"` quotes
-- en dash `–` for page ranges, never hyphen `-`
-- italic journal and conference venue names only
-- superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th` wherever they appear
-- never emit `?` as a substitute for quotation marks, dashes, or other punctuation
-- never collapse the post-title space; forms like `,”IEEE` are invalid and must be `,” IEEE`
+- Fully justified paragraph alignment
+- One citation paragraph per reference
+- Curly quotation marks `“ ”` around article and paper titles, never straight ASCII `"` quotes
+- En dash `–` for page ranges, never hyphen `-`
+- Italic journal and conference venue names only
+- Superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th` wherever they appear
+- Never emit `?` as a substitute for quotation marks, dashes, or other punctuation
+- Never collapse the post-title space; forms like `,”IEEE` are invalid and must be `,” IEEE`
 
 ### Journal article
 
@@ -106,6 +112,7 @@ The saved Word document should format citations as:
 ```
 
 Rules:
+
 - Format authors as initials plus surname.
 - For 1 to 3 authors, do not use an Oxford comma before `and`.
 - The 3-author form must be `M. Cheng, P. Han and Z. Wu`, not `M. Cheng, P. Han, and Z. Wu`.
@@ -124,6 +131,7 @@ Rules:
 ```
 
 Rules:
+
 - Always include `in Proc.`
 - Include city, country, and month when they can be verified.
 - Do not include DOI for conference papers.
@@ -138,6 +146,7 @@ Rules:
 ```
 
 Rules:
+
 - Superscript ordinal suffixes such as `2nd ed.` or `3rd ed.` in the Word document.
 
 ### Book chapter
@@ -165,6 +174,25 @@ Rules:
 - If a title maps to multiple possible works, surface the ambiguity and ask the user to choose.
 - Preserve input order when formatting multiple entries.
 - Treat author completeness, author-name order, publication date completeness, and dropped metadata as mandatory final checks before returning or saving the citations.
+
+## Regression checkpoints
+
+These regressions must be fixed if they appear in the source text or intermediate output:
+
+```text
+[15] R. Wang, S. Pekarek, P. O'Regan, A. Larson, and R. van Maaren, “Incorporating skew in a magnetic equivalent circuit model of synchronous machines,” IEEE Trans. Energy Convers., vol. 30, no. 2, pp. 816–818, Jun. 2015.
+
+[16] J. Chen, W. Hua, L. Shao and Z. Wu, “Modified magnetic equivalent circuit of double-stator single-rotor axial flux permanent magnet machine considering stator radial-end flux-leakage,” IET Elect. Power Appl., vol. 18, no. 2, pp. 195–207, 2024.
+```
+
+Never return the broken forms below:
+
+```text
+[15] ... ?Incorporating skew ... pp. 816?818 ...
+[16] ... J. Chen ... “Modified magnetic equivalent circuit ...” ...
+```
+
+The second broken form is invalid because it dropped authors that are present in the authoritative source.
 
 ## Example
 
