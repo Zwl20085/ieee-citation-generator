@@ -133,7 +133,7 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 ```
 
 **Verify:**
-- [x] Hyphen replaced with the intended page-range dash in the saved Word document
+- [x] En dash preserved for page ranges in chat and in the saved Word document
 - [x] Already-abbreviated journal name preserved
 - [x] Existing format mostly retained with minor fixes
 - [x] The journal venue name is italicized in the Word document
@@ -146,8 +146,8 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 
 **Verify:**
 - [x] The saved Word document contains one citation paragraph
-- [x] Title quotes remain curly quotes in the saved document
-- [x] Page ranges render with an en dash in Word output
+- [x] Title quotes remain curly quotation marks in the saved document
+- [x] Page ranges render with en dashes in Word output instead of collapsing to editor-dependent mojibake
 
 ## T12: Ordinal superscript formatting
 
@@ -192,3 +192,13 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 **Verify:**
 - [x] Two-author output omits the comma before `and`
 - [x] Page range uses an en dash
+
+## T16: Punctuation corruption recovery
+
+**Input:** A citation line where title quotes or page dashes appear as `?`
+
+**Expected output:** the returned citation normalizes those characters to `“ ”` and `–` rather than preserving `?`
+
+**Verify:**
+- [x] No citation returned to the user contains `?` in place of quotation marks
+- [x] No page range returned to the user contains `?` in place of an en dash

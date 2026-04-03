@@ -29,9 +29,11 @@ For each citation entry, determine what you're working with:
 - **Full citation needing reformatting**: Has all fields but not in IEEE format -> reformat directly
 - **Already IEEE formatted**: Verify correctness and fix any issues
 
+Treat the title as the authoritative anchor for the work. Even if the input already includes authors, venue, year, volume, issue, pages, or DOI, verify those fields against the title match instead of trusting them blindly.
+
 ### Step 3: Resolve Missing Metadata
 
-If any required fields are missing, use web search to find them.
+If any required fields are missing, use web search to find them. Even when fields are already present, re-check them from the title because the input metadata may be incomplete or wrong.
 
 **Required fields by citation type:**
 
@@ -44,19 +46,27 @@ If any required fields are missing, use web search to find them.
 
 **Search strategy:**
 1. First, try searching for the exact paper title with quotes
-2. If that fails, search for title + key author name
-3. Use DOI-based lookup if a DOI is found (fetch `https://doi.org/` + DOI or search CrossRef)
-4. For arXiv papers, check `arxiv.org` directly
+2. Use the title match to verify or replace the author list and order, publication date, venue title, volume, issue, pages or article number, and DOI when applicable
+3. If that fails, search for title + key author name
+4. Use DOI-based lookup if a DOI is found (fetch `https://doi.org/` + DOI or search CrossRef)
+5. For arXiv papers, check `arxiv.org` directly
 
 **IMPORTANT**: When web search returns results, verify the result matches the intended paper (check title similarity, not just partial matches). If uncertain, present the found metadata to the user and ask for confirmation.
 
-Before finalizing any reference, run a post-generation verification pass:
-- Re-check the complete author list and the initials-plus-surname sequence against the best available source
+### Step 4: Final Verification Pass
+
+After generating each reference, re-check the result before returning it.
+
+- Re-check the author list and author-name order against the best available source
+- Prefer the title match over the input metadata whenever they disagree
 - Confirm the publication date is complete and correctly reflected in the citation
 - Check whether any information was lost during formatting, such as missing authors, pages, article numbers, venue details, city/country, month, or year
-- If the first web result is incomplete or conflicting, continue searching until the citation is as complete and accurate as the available sources allow, or surface the ambiguity to the user
+- Confirm there is exactly one space after the reference number before the citation text
+- Confirm there is exactly one space between the closing title quote and the following journal, conference, book, or website text
+- If quotes, dashes, or apostrophes degrade into `?`, replacement glyphs, or other mojibake, normalize them before returning or saving the citation
+- If the web result is incomplete or conflicting, continue searching until the citation is as complete and accurate as the available sources allow, or surface the ambiguity to the user
 
-### Step 4: Apply Abbreviations
+### Step 5: Apply Abbreviations
 
 Load the abbreviation data from the skill's data directory:
 - `journal-abbreviations.json` - for journal name lookup
@@ -72,11 +82,17 @@ Load the abbreviation data from the skill's data directory:
 2. If not found, abbreviate each word using `word_abbreviations` from the same file
 3. Keep proper nouns, acronyms, and short words (<=4 letters like "and", "of", "for", "the", "on", "in") while dropping articles ("the", "a", "an") where appropriate
 
-### Step 5: Format Citations
+### Step 6: Format Citations
 
 Apply the correct IEEE template based on citation type. Format the citations as plain text in the chat response, but save them to a `.docx` file as the canonical deliverable.
 
-Use curly quotes `“ ”` for titles and en dashes `–` for page ranges everywhere: instructions, examples, chat output, and the saved Word document.
+Apply these punctuation rules everywhere: instructions, examples, chat output, and the saved `.docx`.
+
+Apply these spacing rules everywhere as well:
+- Use exactly one space between the reference number and the citation text
+- Use exactly one space between the closing title quote and the following journal, conference, book, or website text
+- When returning multiple references in chat, separate them with a blank line
+- In the saved Word document, keep one citation paragraph per reference and leave visible paragraph spacing between references
 
 The saved Word document should format citations as follows:
 - Times New Roman for all citation text
@@ -86,8 +102,9 @@ The saved Word document should format citations as follows:
 - en dash `–` for page ranges, never hyphen `-`
 - italic journal and conference venue names only
 - superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th` wherever they appear, including conference ordinals and edition ordinals
+- never emit `?` as a substitute for quotation marks, dashes, or other punctuation
 
-These are Word-formatting requirements only. The chat response remains plain text and does not need to show italics, superscript, or paragraph justification.
+These are Word-formatting requirements only. The chat response remains plain text and does not need to show italics, superscript, or paragraph justification, but it should still preserve the required spaces and use a blank line between adjacent references.
 
 #### Journal Article
 ```text
@@ -101,7 +118,8 @@ Rules:
   - 3-author regression guard: correct `M. Cheng, P. Han and Z. Wu`; incorrect `M. Cheng, P. Han, and Z. Wu`
   - 4-6 authors: Oxford comma before "and" - "A. Smith, B. Jones, C. Lee, and D. Brown"
   - 7+ authors: list the first 6, then "et al."
-- Title in curly quotes `“ ”` and sentence case
+- Title in curly quotation marks `“ ”` and sentence case
+- Title in curly quotation marks `“ ”` and sentence case
 - Journal name abbreviated, not in quotes in the plain-text response, but italicized in the Word document
 - Use an en dash for page ranges
 - If article number instead of pages: use `Art. no. XXXXX` instead of `pp.`
@@ -159,16 +177,19 @@ Rules:
 [N] A. B. Surname, “Title of patent,” Country Patent XXXXXXX, Mon. Day, Year.
 ```
 
-### Step 6: Number and Output
+### Step 7: Number and Output
 
 1. Number citations sequentially as `[1]`, `[2]`, `[3]`, and so on.
-2. Display all formatted citations to the user in the conversation as plain text.
+2. Display all formatted citations to the user in the conversation as plain text, with a blank line between references.
 3. Save the formatted citations to a `.docx` file:
    - If input was a file (e.g., `input.txt`), save as `input_ieee.docx` in the same directory
    - If input was direct text, save as `ieee_citations.docx` in the current working directory
    - Create a Word document with one citation paragraph per reference in input order
    - Use Times New Roman and justified paragraph alignment throughout
-   - Preserve curly quotes around titles and en dashes in page ranges
+   - Add paragraph spacing between citation paragraphs so adjacent references do not visually run together
+   - Preserve curly quotation marks around titles and en dashes for page ranges
+   - Add paragraph spacing between citation paragraphs so adjacent references do not visually run together
+   - Preserve curly quotation marks around titles and en dashes for page ranges
    - Italicize journal and conference venue names only
    - Render ordinal suffixes `st`, `nd`, `rd`, and `th` as superscript wherever they appear
    - Treat the `.docx` file as the primary artifact even though the conversation response remains plain text

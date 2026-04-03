@@ -11,6 +11,8 @@ Expected paragraph content for the generated Word document:
 Expected Word formatting for every citation paragraph:
 - Times New Roman
 - justified alignment
+- curly quotation marks around article and paper titles
+- en dashes for page ranges, never `?` or `-`
 - journal and conference venue names italicized
 - ordinal suffixes such as `24th` or `2nd ed.` rendered with superscript suffixes
 

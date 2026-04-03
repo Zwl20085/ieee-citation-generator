@@ -26,15 +26,20 @@ Use this skill when the user asks for IEEE citations, mentions `ieee-citation-ge
    - Partial citation: fill in missing fields with targeted web lookup.
    - Full citation in another style: reformat into IEEE.
    - Already IEEE-like: verify and correct.
+   - Treat the title as the authoritative anchor. Do not trust input authors, venue, date, volume, issue, pages, or DOI without checking them against the title match.
 3. Resolve missing metadata carefully.
    - Search the exact title first.
+   - Use the title match to verify or replace the author list and order, publication date, venue title, volume, issue, pages or article number, and DOI when applicable.
    - If needed, search title plus an author name.
    - Use DOI or arXiv pages directly when available.
    - Verify the result matches the intended work before formatting.
 4. After generating each reference, run a final verification pass.
    - Re-check the author list and author-name order against the best available source.
+   - Prefer the title match over the input metadata whenever they disagree.
    - Confirm the publication date is complete and correctly reflected in the citation.
    - Check whether any information was lost during formatting, such as missing authors, pages, article numbers, venue details, city/country, month, or year.
+   - Check that there is exactly one space after the reference number and exactly one space between the closing title quote and the following journal, conference, book, or website text.
+   - If quotes, dashes, or apostrophes degrade into `?`, replacement glyphs, or other mojibake, normalize them before returning or saving the citation.
    - If the web result is incomplete or conflicting, continue searching until the citation is as complete and accurate as the available sources allow, or surface the ambiguity to the user.
 5. Load the local data files from this skill directory before formatting:
    - `data/journal-abbreviations.json`
@@ -42,10 +47,12 @@ Use this skill when the user asks for IEEE citations, mentions `ieee-citation-ge
    - `data/publisher-templates.json`
 6. Apply IEEE formatting rules.
 7. Return the final references numbered as `[1]`, `[2]`, and so on in the chat response.
+   - Separate adjacent references with a blank line in the chat response.
 8. When the user provided a file or asked for an output file, save the results to:
    - `<input_basename>_ieee.docx` next to the source file, or
    - `ieee_citations.docx` in the current working directory for direct text
 9. Create the saved `.docx` with one justified paragraph per reference, using Times New Roman, italic journal and conference venue names, curly quotes around titles, en dashes for page ranges, and superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`.
+   - Add paragraph spacing between references so consecutive entries remain visually separated.
 
 ## Required Metadata
 
@@ -76,6 +83,11 @@ Return citations as plain text in chat. Save the canonical deliverable as a `.do
 
 Apply these punctuation rules everywhere: instructions, examples, chat output, and the saved `.docx`.
 
+Apply these spacing rules everywhere as well:
+- Use exactly one space between the reference number and the citation text.
+- Use exactly one space between the closing title quote and the following journal, conference, book, or website text.
+- When returning multiple references in chat, separate them with a blank line.
+- In the saved Word document, keep one citation paragraph per reference and leave visible paragraph spacing between references.
 The saved Word document should format citations as:
 - Times New Roman for all citation text
 - fully justified paragraph alignment
@@ -84,6 +96,8 @@ The saved Word document should format citations as:
 - en dash `–` for page ranges, never hyphen `-`
 - italic journal and conference venue names only
 - superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th` wherever they appear
+- never emit `?` as a substitute for quotation marks, dashes, or other punctuation
+- never collapse the post-title space; forms like `,”IEEE` are invalid and must be `,” IEEE`
 
 ### Journal article
 
