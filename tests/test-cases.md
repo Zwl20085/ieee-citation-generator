@@ -17,6 +17,9 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 - [x] City, state, country included
 - [x] Saved `ieee_citations.docx` contains the citation as a Word paragraph
 - [x] Title quotes and page-range punctuation are preserved correctly in Word output
+- [x] The Word paragraph uses Times New Roman
+- [x] The Word paragraph is justified
+- [x] The conference venue name is italicized in Word output
 
 ## T2: Partial citation missing DOI
 
@@ -43,6 +46,7 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 - [x] Each citation type handled correctly (conference, conference, journal/conference, website, book)
 - [x] Output file created
 - [x] The generated Word file contains one citation per paragraph
+- [x] Every paragraph uses Times New Roman and justified alignment
 
 ## T4: Non-IEEE paper (ACM)
 
@@ -132,6 +136,7 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 - [x] Hyphen replaced with the intended page-range dash in the saved Word document
 - [x] Already-abbreviated journal name preserved
 - [x] Existing format mostly retained with minor fixes
+- [x] The journal venue name is italicized in the Word document
 
 ## T11: Word output punctuation fidelity
 
@@ -143,3 +148,13 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 - [x] The saved Word document contains one citation paragraph
 - [x] Title quotes remain straight double quotes in the saved document
 - [x] Page ranges render with the intended dash glyph in Word output instead of collapsing to editor-dependent mojibake
+
+## T12: Ordinal superscript formatting
+
+**Input:** `Proceedings of the 24th International Conference on Electrical Machines and Systems`
+
+**Expected output:** a `.docx` citation containing `24th` in the venue text
+
+**Verify:**
+- [x] The ordinal suffix `th` is superscripted in the Word document
+- [x] The same superscript rule applies to `1st`, `2nd`, `3rd`, and edition ordinals such as `2nd ed.`

@@ -23,7 +23,7 @@ An IEEE citation skill package that supports both Claude Code and Codex. It gene
 - Handles journal articles, conference papers, books, websites, and arXiv preprints
 - Uses standard IEEE abbreviations (e.g., "IEEE Trans. Power Electron.", "in Proc. IEEE Int. Conf. Elect. Mach. Drives")
 - Works with non-IEEE publishers (ACM, Elsevier, Springer, etc.) while still formatting in IEEE style
-- Saves formatted citations to a `.docx` file by default so Word preserves IEEE-required punctuation reliably
+- Saves formatted citations to a `.docx` file by default so Word preserves IEEE-required punctuation and formatting reliably
 
 ## Usage
 
@@ -74,6 +74,13 @@ Formatted citations are shown in chat as plain text and saved to a `.docx` file:
 Saved file names:
 - Direct input -> `ieee_citations.docx`
 - File input -> `<input_basename>_ieee.docx`
+
+The saved Word document should format each citation as:
+- one justified paragraph per citation
+- Times New Roman for all text
+- straight double quotes around article and paper titles
+- italic journal and conference venue names only
+- superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`
 
 Word output is the default because many plain-text editors and clipboard paths silently replace or mangle the punctuation IEEE references require, especially title quotes and page-range dashes.
 
@@ -155,6 +162,9 @@ This skill follows the [IEEE Reference Guide](https://ieeeauthorcenter.ieee.org/
 - Article titles in double quotes, sentence case
 - Journal and conference names abbreviated per IEEE standards
 - En dash for page ranges in the saved Word document
+- Saved Word output uses Times New Roman and justified paragraphs
+- Journal and conference venue names are italicized in the Word document
+- Ordinal suffixes such as `st`, `nd`, `rd`, and `th` are superscripted in the Word document
 - DOI formatted as `doi: 10.xxxx/xxxxx.`
 - Month abbreviations: Jan., Feb., Mar., Apr., May, Jun., Jul., Aug., Sep., Oct., Nov., Dec.
 

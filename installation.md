@@ -4,6 +4,8 @@ These instructions are designed to be followed by an LLM to self-install the IEE
 
 After installation, the skill should save formatted citations as `.docx` files by default. The conversation output remains plain text, but the Word document is the canonical deliverable.
 
+The saved Word document should format citations as Times New Roman, justified paragraphs, italic journal and conference venue names, and superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`.
+
 ## Prerequisites
 
 - Claude Code or Codex installed and configured
@@ -66,7 +68,7 @@ Expected output: 5 files total - 1 command `.md` file, 1 skill `.md` file, and 3
 /ieee-cite Attention Is All You Need
 ```
 
-The skill should produce a properly formatted IEEE citation with full metadata in chat and save `ieee_citations.docx` in the working directory.
+The skill should produce a properly formatted IEEE citation with full metadata in chat and save `ieee_citations.docx` in the working directory. The saved Word file should use Times New Roman, justified paragraphs, italic venue names for journals and conferences, and superscript ordinal suffixes.
 
 ## Option B: Install for Codex
 
@@ -123,7 +125,7 @@ or
 Format these references in IEEE style and save the result as a Word document.
 ```
 
-The skill should produce formatted IEEE citations in chat and save a `.docx` output file in the working directory.
+The skill should produce formatted IEEE citations in chat and save a `.docx` output file in the working directory. The saved Word file should use Times New Roman, justified paragraphs, italic venue names for journals and conferences, and superscript ordinal suffixes.
 
 ## Uninstallation
 
@@ -152,7 +154,7 @@ To update to the latest version, re-run the relevant download steps for your pla
 - **Abbreviation data not loading**: Verify the platform-specific data directory path matches the instructions above.
 - **curl fails**: Check your internet connection and ensure the GitHub repository is accessible.
 - **Permission denied**: Ensure the installed files are readable by your current user.
-- **Output opens with the wrong punctuation**: Open the generated `.docx` file instead of copying citations from a plain-text editor, since Word output preserves the intended quotes and dashes.
+- **Output opens with the wrong formatting**: Open the generated `.docx` file in Word and verify Times New Roman, justification, venue italics, and superscript ordinal suffixes rather than relying on a plain-text editor preview.
 
 ## Platform Notes
 

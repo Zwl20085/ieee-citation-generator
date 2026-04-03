@@ -68,7 +68,17 @@ Load the abbreviation data from the skill's data directory:
 
 ### Step 5: Format Citations
 
-Apply the correct IEEE template based on citation type. Format the citations as plain text in the chat response, but save them to a `.docx` file as the canonical deliverable. In the saved Word document, preserve straight ASCII double quotes `"` for article and paper titles and preserve the intended page-range dash glyph exactly as written.
+Apply the correct IEEE template based on citation type. Format the citations as plain text in the chat response, but save them to a `.docx` file as the canonical deliverable.
+
+The saved Word document should format citations as follows:
+- Times New Roman for all citation text
+- fully justified paragraph alignment
+- one citation paragraph per reference
+- straight ASCII double quotes `"` around article and paper titles
+- italic journal and conference venue names only
+- superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th` wherever they appear, including conference ordinals and edition ordinals
+
+These are Word-formatting requirements only. The chat response remains plain text and does not need to show italics, superscript, or paragraph justification.
 
 #### Journal Article
 ```text
@@ -82,7 +92,7 @@ Rules:
   - 4-6 authors: Oxford comma before "and" - "A. Smith, B. Jones, C. Lee, and D. Brown"
   - 7+ authors: list the first 6, then "et al."
 - Title in straight ASCII double quotes `"` and sentence case
-- Journal name abbreviated, not in quotes
+- Journal name abbreviated, not in quotes in the plain-text response, but italicized in the Word document
 - Use an en dash for page ranges in the saved Word document
 - If article number instead of pages: use `Art. no. XXXXX` instead of `pp.`
 - Do not include DOI for standard journal articles with volume, issue, and page/article metadata already present
@@ -100,6 +110,8 @@ Rules:
 - Pages are optional, but include them when available
 - Do not include DOI for conference papers
 - Apply the same author-list punctuation rule as journal articles
+- Italicize the conference venue name in the Word document
+- Superscript ordinal suffixes such as `24th` or `8th` in the Word document
 
 #### Book
 ```text
@@ -109,6 +121,7 @@ Rules:
 Rules:
 - Book title is not in quotes
 - Include edition only if not the first edition
+- Superscript ordinal suffixes such as `2nd ed.` or `3rd ed.` in the Word document
 
 #### Book Chapter
 ```text
@@ -144,7 +157,10 @@ Rules:
    - If input was a file (e.g., `input.txt`), save as `input_ieee.docx` in the same directory
    - If input was direct text, save as `ieee_citations.docx` in the current working directory
    - Create a Word document with one citation paragraph per reference in input order
-   - Preserve the intended punctuation in the Word output, especially straight double quotes around titles and the page-range dash glyph
+   - Use Times New Roman and justified paragraph alignment throughout
+   - Preserve straight double quotes around titles and the intended page-range dash glyph
+   - Italicize journal and conference venue names only
+   - Render ordinal suffixes `st`, `nd`, `rd`, and `th` as superscript wherever they appear
    - Treat the `.docx` file as the primary artifact even though the conversation response remains plain text
 
 ### Special Handling
@@ -188,6 +204,8 @@ Attention Is All You Need
 
 **Saved file:**
 `ieee_citations.docx`
+
+In the Word document, the paragraph should be justified, use Times New Roman, italicize `Adv. Neural Inf. Process. Syst. (NeurIPS)`, and superscript any ordinal suffixes if present.
 
 **Input (file with multiple entries):**
 ```text

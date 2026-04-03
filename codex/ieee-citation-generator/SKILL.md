@@ -40,7 +40,7 @@ Use this skill when the user asks for IEEE citations, mentions `ieee-citation-ge
 7. When the user provided a file or asked for an output file, save the results to:
    - `<input_basename>_ieee.docx` next to the source file, or
    - `ieee_citations.docx` in the current working directory for direct text
-8. Create the saved `.docx` with one citation paragraph per reference, preserving straight double quotes around titles and the intended page-range dash glyph.
+8. Create the saved `.docx` with one justified paragraph per reference, using Times New Roman, italic journal and conference venue names, straight double quotes around titles, and superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`.
 
 ## Required Metadata
 
@@ -69,6 +69,14 @@ Use this skill when the user asks for IEEE citations, mentions `ieee-citation-ge
 
 Return citations as plain text in chat. Save the canonical deliverable as a `.docx` file.
 
+The saved Word document should format citations as:
+- Times New Roman for all citation text
+- fully justified paragraph alignment
+- one citation paragraph per reference
+- straight ASCII double quotes `"` around article and paper titles
+- italic journal and conference venue names only
+- superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th` wherever they appear
+
 ### Journal article
 
 ```text
@@ -82,6 +90,7 @@ Rules:
 - For 7 or more authors, list the first 6, then `et al.`
 - Use article numbers as `Art. no. XXXXX` when pages are unavailable.
 - Include a DOI only for early-access journal articles with no volume, issue, or pages yet.
+- Italicize the journal venue name in the Word document.
 
 ### Conference paper
 
@@ -93,12 +102,17 @@ Rules:
 - Always include `in Proc.`
 - Include city, country, and month when they can be verified.
 - Do not include DOI for conference papers.
+- Italicize the conference venue name in the Word document.
+- Superscript ordinal suffixes such as `24th` or `8th` in the Word document.
 
 ### Book
 
 ```text
 [N] A. B. Surname, Title of Book, Xth ed. City, Country: Publisher, Year.
 ```
+
+Rules:
+- Superscript ordinal suffixes such as `2nd ed.` or `3rd ed.` in the Word document.
 
 ### Book chapter
 
@@ -144,6 +158,8 @@ Saved file:
 ```text
 ieee_citations.docx
 ```
+
+In the Word document, the paragraph should be justified, use Times New Roman, italicize the venue name, and superscript ordinal suffixes where present.
 
 ## Tools
 
