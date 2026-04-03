@@ -1,18 +1,16 @@
 # Installation Instructions (For LLMs)
 
-These instructions are designed to be followed by an LLM (e.g., Claude Code) to self-install the IEEE Citation Generator skill.
+These instructions are designed to be followed by an LLM to self-install the IEEE Citation Generator skill in either Claude Code or Codex.
 
 After installation, the skill should save formatted citations as `.docx` files by default. The conversation output remains plain text, but the Word document is the canonical deliverable.
 
 ## Prerequisites
 
-- Claude Code CLI installed and configured
+- Claude Code or Codex installed and configured
 - `curl` available in the terminal
 - Internet access to fetch files from GitHub
 
-## Installation Steps
-
-Follow these steps in order. Execute each command using the Bash tool.
+## Option A: Install for Claude Code
 
 ### Step 1: Create required directories
 
@@ -21,14 +19,14 @@ mkdir -p ~/.claude/skills/ieee-citation-data
 mkdir -p ~/.claude/commands
 ```
 
-### Step 2: Download the command file (registers the /ieee-cite slash command)
+### Step 2: Download the command file
 
 ```bash
 curl -fSL -o ~/.claude/commands/ieee-cite.md \
   "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/commands/ieee-cite.md"
 ```
 
-### Step 3: Download the skill file (contains the full instructions)
+### Step 3: Download the skill file
 
 ```bash
 curl -fSL -o ~/.claude/skills/ieee-citation-generator.md \
@@ -36,8 +34,6 @@ curl -fSL -o ~/.claude/skills/ieee-citation-generator.md \
 ```
 
 ### Step 4: Download the abbreviation data files
-
-Run all three commands:
 
 ```bash
 curl -fSL -o ~/.claude/skills/ieee-citation-data/journal-abbreviations.json \
@@ -54,9 +50,7 @@ curl -fSL -o ~/.claude/skills/ieee-citation-data/publisher-templates.json \
   "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/data/publisher-templates.json"
 ```
 
-### Step 5: Verify installation
-
-Check that all files exist:
+### Step 5: Verify Claude installation
 
 ```bash
 ls -la ~/.claude/commands/ieee-cite.md
@@ -66,9 +60,7 @@ ls -la ~/.claude/skills/ieee-citation-data/
 
 Expected output: 5 files total - 1 command `.md` file, 1 skill `.md` file, and 3 `.json` data files.
 
-### Step 6: Test the skill
-
-Invoke the skill by typing in Claude Code:
+### Step 6: Test in Claude Code
 
 ```text
 /ieee-cite Attention Is All You Need
@@ -76,9 +68,66 @@ Invoke the skill by typing in Claude Code:
 
 The skill should produce a properly formatted IEEE citation with full metadata in chat and save `ieee_citations.docx` in the working directory.
 
+## Option B: Install for Codex
+
+### Step 1: Create required directories
+
+```bash
+mkdir -p ~/.codex/skills/ieee-citation-generator/data
+```
+
+### Step 2: Download the Codex skill file
+
+```bash
+curl -fSL -o ~/.codex/skills/ieee-citation-generator/SKILL.md \
+  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/codex/ieee-citation-generator/SKILL.md"
+```
+
+### Step 3: Download the abbreviation data files
+
+```bash
+curl -fSL -o ~/.codex/skills/ieee-citation-generator/data/journal-abbreviations.json \
+  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/data/journal-abbreviations.json"
+```
+
+```bash
+curl -fSL -o ~/.codex/skills/ieee-citation-generator/data/conference-abbreviations.json \
+  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/data/conference-abbreviations.json"
+```
+
+```bash
+curl -fSL -o ~/.codex/skills/ieee-citation-generator/data/publisher-templates.json \
+  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/data/publisher-templates.json"
+```
+
+### Step 4: Verify Codex installation
+
+```bash
+ls -la ~/.codex/skills/ieee-citation-generator/SKILL.md
+ls -la ~/.codex/skills/ieee-citation-generator/data/
+```
+
+Expected output: 4 files total - 1 `SKILL.md` file and 3 `.json` data files.
+
+### Step 5: Test in Codex
+
+Ask Codex to use the installed skill, for example:
+
+```text
+Use ieee-citation-generator on this file: path/to/my-references.txt
+```
+
+or
+
+```text
+Format these references in IEEE style and save the result as a Word document.
+```
+
+The skill should produce formatted IEEE citations in chat and save a `.docx` output file in the working directory.
+
 ## Uninstallation
 
-To remove the skill:
+### Claude Code
 
 ```bash
 rm ~/.claude/commands/ieee-cite.md
@@ -86,19 +135,28 @@ rm ~/.claude/skills/ieee-citation-generator.md
 rm -rf ~/.claude/skills/ieee-citation-data/
 ```
 
+### Codex
+
+```bash
+rm -rf ~/.codex/skills/ieee-citation-generator/
+```
+
 ## Updating
 
-To update to the latest version, re-run Steps 2, 3, and 4. The files will be overwritten with the latest versions.
+To update to the latest version, re-run the relevant download steps for your platform. The files will be overwritten with the latest versions.
 
 ## Troubleshooting
 
-- **Skill not appearing**: Ensure `~/.claude/commands/ieee-cite.md` exists (this registers the slash command). Restart Claude Code after installation.
-- **Abbreviation data not loading**: Verify the data directory path matches `~/.claude/skills/ieee-citation-data/`.
+- **Claude skill not appearing**: Ensure `~/.claude/commands/ieee-cite.md` exists and restart Claude Code if needed.
+- **Codex skill not appearing**: Ensure `~/.codex/skills/ieee-citation-generator/SKILL.md` exists in a folder named after the skill.
+- **Abbreviation data not loading**: Verify the platform-specific data directory path matches the instructions above.
 - **curl fails**: Check your internet connection and ensure the GitHub repository is accessible.
-- **Permission denied**: Run `chmod 644 ~/.claude/skills/ieee-citation-generator.md` and `chmod 644 ~/.claude/skills/ieee-citation-data/*.json`.
+- **Permission denied**: Ensure the installed files are readable by your current user.
 - **Output opens with the wrong punctuation**: Open the generated `.docx` file instead of copying citations from a plain-text editor, since Word output preserves the intended quotes and dashes.
 
 ## Platform Notes
 
 - **macOS / Linux**: `~` expands to your home directory automatically.
-- **Windows (Git Bash / WSL)**: `~` expands to `C:\Users\<username>` in Git Bash or `/home/<username>` in WSL. Claude Code on Windows uses `%USERPROFILE%\.claude\skills\`.
+- **Windows (Git Bash / WSL)**: `~` expands to your user home directory for either toolchain.
+- **Claude Code on Windows**: typically uses `%USERPROFILE%\.claude\`.
+- **Codex on Windows**: typically uses `%USERPROFILE%\.codex\`.

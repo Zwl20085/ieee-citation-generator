@@ -1,14 +1,19 @@
-# IEEE Citation Generator for Claude Code
+# IEEE Citation Generator for Claude Code and Codex
 
-A Claude Code skill that generates properly formatted IEEE transaction-style citations from paper titles, raw citation text, or plain-text reference files, then saves the polished result as a Word document.
+An IEEE citation skill package that supports both Claude Code and Codex. It generates properly formatted IEEE transaction-style citations from paper titles, raw citation text, or plain-text reference files, then saves the polished result as a Word document.
+
+## Platform Support
+
+- **Claude Code**: supported through the slash command in `commands/ieee-cite.md` plus the Claude-oriented skill file in `skills/ieee-citation-generator.md`
+- **Codex**: supported through the packaged Codex skill directory in `codex/ieee-citation-generator/`
 
 ## LLM Installation
 
-> **For AI assistants**: To install this skill, fetch and follow the instructions at:
+> **For AI assistants**: To install this repository, fetch and follow the instructions at:
 > ```
 > https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/installation.md
 > ```
-> Read that file and execute each step sequentially.
+> Then choose the Claude Code or Codex installation section that matches your environment.
 
 ## What It Does
 
@@ -22,24 +27,34 @@ A Claude Code skill that generates properly formatted IEEE transaction-style cit
 
 ## Usage
 
-### Direct input (paper title)
+### Claude Code
+
 ```text
 /ieee-cite Attention Is All You Need
 ```
 
-### Direct input (messy citation)
-```text
-/ieee-cite Vaswani et al., Attention Is All You Need, NeurIPS 2017
-```
-
-### File input (batch processing)
 ```text
 /ieee-cite path/to/my-references.txt
+```
+
+### Codex
+
+Install the Codex skill, then invoke it naturally by asking for IEEE-formatted citations or by mentioning `ieee-citation-generator`.
+
+Example prompts:
+
+```text
+Use ieee-citation-generator on this file: path/to/my-references.txt
+```
+
+```text
+Format these references in IEEE style and save the result as a Word document.
 ```
 
 The batch file can be any readable plain-text citation list, but `.txt` remains the recommended format for inputs.
 
 Where `my-references.txt` contains one citation per line:
+
 ```text
 Deep Residual Learning for Image Recognition
 BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding
@@ -49,6 +64,7 @@ https://pytorch.org/docs/stable/index.html
 ### Output
 
 Formatted citations are shown in chat as plain text and saved to a `.docx` file:
+
 ```text
 [1] K. He, X. Zhang, S. Ren, and J. Sun, "Deep residual learning for image recognition," in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, Jun. 2016, pp. 770-778.
 [2] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, "BERT: Pre-training of deep bidirectional transformers for language understanding," in Proc. Conf. North Amer. Ch. Assoc. Comput. Linguist.: Hum. Lang. Technol. (NAACL-HLT), Minneapolis, MN, USA, Jun. 2019, pp. 4171-4186.
@@ -74,6 +90,13 @@ Word output is the default because many plain-text editors and clipboard paths s
 | Standard | IEEE, ISO, IEC standards |
 | Patent | Any country |
 
+## Repository Layout
+
+- `commands/ieee-cite.md` - Claude Code slash command
+- `skills/ieee-citation-generator.md` - Claude Code skill instructions
+- `codex/ieee-citation-generator/SKILL.md` - Codex skill instructions
+- `data/` - shared abbreviation and formatting data for both platforms
+
 ## Abbreviation Coverage
 
 The skill includes abbreviation tables for:
@@ -84,28 +107,43 @@ The skill includes abbreviation tables for:
 
 ### Extending Abbreviations
 
-To add custom abbreviations, edit the JSON files in `~/.claude/skills/ieee-citation-data/`:
+To add custom abbreviations:
+- Claude Code installs use `~/.claude/skills/ieee-citation-data/`
+- Codex installs use `~/.codex/skills/ieee-citation-generator/data/`
+
+Edit:
 - `journal-abbreviations.json` - add `"Full Name": "Abbrev. Name"` entries
 - `conference-abbreviations.json` - add to `full_conference_names` or `word_abbreviations`
 
 ## Manual Installation
 
-If you prefer to install manually:
+### Claude Code
 
-1. Copy `commands/ieee-cite.md` to `~/.claude/commands/` (registers the `/ieee-cite` slash command)
-2. Copy `skills/ieee-citation-generator.md` to `~/.claude/skills/` (the full skill instructions)
+1. Copy `commands/ieee-cite.md` to `~/.claude/commands/`
+2. Copy `skills/ieee-citation-generator.md` to `~/.claude/skills/`
 3. Copy the `data/` directory contents to `~/.claude/skills/ieee-citation-data/`
+
+### Codex
+
+1. Create `~/.codex/skills/ieee-citation-generator/`
+2. Copy `codex/ieee-citation-generator/SKILL.md` into that directory as `SKILL.md`
+3. Copy the `data/` directory into `~/.codex/skills/ieee-citation-generator/data/`
 
 ```bash
 # Clone the repo
 git clone https://github.com/Zwl20085/ieee-citation-generator.git
 cd ieee-citation-generator
 
-# Install
+# Claude Code install
 mkdir -p ~/.claude/commands ~/.claude/skills/ieee-citation-data
 cp commands/ieee-cite.md ~/.claude/commands/
 cp skills/ieee-citation-generator.md ~/.claude/skills/
 cp data/*.json ~/.claude/skills/ieee-citation-data/
+
+# Codex install
+mkdir -p ~/.codex/skills/ieee-citation-generator/data
+cp codex/ieee-citation-generator/SKILL.md ~/.codex/skills/ieee-citation-generator/SKILL.md
+cp data/*.json ~/.codex/skills/ieee-citation-generator/data/
 ```
 
 ## IEEE Citation Format Reference
