@@ -66,9 +66,9 @@ https://pytorch.org/docs/stable/index.html
 Formatted citations are shown in chat as plain text and saved to a `.docx` file:
 
 ```text
-[1] K. He, X. Zhang, S. Ren, and J. Sun, "Deep residual learning for image recognition," in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, Jun. 2016, pp. 770-778.
-[2] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, "BERT: Pre-training of deep bidirectional transformers for language understanding," in Proc. Conf. North Amer. Ch. Assoc. Comput. Linguist.: Hum. Lang. Technol. (NAACL-HLT), Minneapolis, MN, USA, Jun. 2019, pp. 4171-4186.
-[3] "PyTorch documentation." PyTorch. https://pytorch.org/docs/stable/index.html (accessed Apr. 3, 2026).
+[1] K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning for image recognition,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, Jun. 2016, pp. 770–778.
+[2] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, “BERT: Pre-training of deep bidirectional transformers for language understanding,” in Proc. Conf. North Amer. Ch. Assoc. Comput. Linguist.: Hum. Lang. Technol. (NAACL-HLT), Minneapolis, MN, USA, Jun. 2019, pp. 4171–4186.
+[3] “PyTorch documentation.” PyTorch. https://pytorch.org/docs/stable/index.html (accessed Apr. 3, 2026).
 ```
 
 Saved file names:
@@ -78,9 +78,11 @@ Saved file names:
 The saved Word document should format each citation as:
 - one justified paragraph per citation
 - Times New Roman for all text
-- straight double quotes around article and paper titles
+- curly quotation marks `“ ”` around article and paper titles
+- en dash `–` for page ranges, never hyphen `-`
 - italic journal and conference venue names only
 - superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`
+- never substitute `?` for quotation marks or page-range dashes
 
 Word output is the default because many plain-text editors and clipboard paths silently replace or mangle the punctuation IEEE references require, especially title quotes and page-range dashes.
 
@@ -165,6 +167,7 @@ This skill follows the [IEEE Reference Guide](https://ieeeauthorcenter.ieee.org/
 - Saved Word output uses Times New Roman and justified paragraphs
 - Journal and conference venue names are italicized in the Word document
 - Ordinal suffixes such as `st`, `nd`, `rd`, and `th` are superscripted in the Word document
+- If punctuation degrades into `?` or mojibake, normalize it to curly quotes and en dashes before returning or saving the citation
 - DOI formatted as `doi: 10.xxxx/xxxxx.`
 - Month abbreviations: Jan., Feb., Mar., Apr., May, Jun., Jul., Aug., Sep., Oct., Nov., Dec.
 

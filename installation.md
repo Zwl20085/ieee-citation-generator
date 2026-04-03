@@ -4,7 +4,7 @@ These instructions are designed to be followed by an LLM to self-install the IEE
 
 After installation, the skill should save formatted citations as `.docx` files by default. The conversation output remains plain text, but the Word document is the canonical deliverable.
 
-The saved Word document should format citations as Times New Roman, justified paragraphs, italic journal and conference venue names, and superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`.
+The saved Word document should format citations as Times New Roman, justified paragraphs, curly quotes around article and paper titles, en dashes for page ranges, italic journal and conference venue names, and superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`.
 
 ## Prerequisites
 
@@ -154,7 +154,8 @@ To update to the latest version, re-run the relevant download steps for your pla
 - **Abbreviation data not loading**: Verify the platform-specific data directory path matches the instructions above.
 - **curl fails**: Check your internet connection and ensure the GitHub repository is accessible.
 - **Permission denied**: Ensure the installed files are readable by your current user.
-- **Output opens with the wrong formatting**: Open the generated `.docx` file in Word and verify Times New Roman, justification, venue italics, and superscript ordinal suffixes rather than relying on a plain-text editor preview.
+- **Output opens with the wrong formatting**: Open the generated `.docx` file in Word and verify Times New Roman, justification, curly quotes, en dashes, venue italics, and superscript ordinal suffixes rather than relying on a plain-text editor preview.
+- **Output shows `?` instead of quotes or page dashes**: Treat that as punctuation corruption. Replace the affected characters with curly quotes `“ ”` and en dashes `–`, then verify the corrected citation before returning it.
 
 ## Platform Notes
 

@@ -31,16 +31,22 @@ Use this skill when the user asks for IEEE citations, mentions `ieee-citation-ge
    - If needed, search title plus an author name.
    - Use DOI or arXiv pages directly when available.
    - Verify the result matches the intended work before formatting.
-4. Load the local data files from this skill directory before formatting:
+4. After generating each reference, run a final verification pass.
+   - Re-check the author list and author-name order against the best available source.
+   - Confirm the publication date is complete and correctly reflected in the citation.
+   - Check whether any information was lost during formatting, such as missing authors, pages, article numbers, venue details, city/country, month, or year.
+   - If quotes, dashes, or apostrophes degrade into `?`, replacement glyphs, or other mojibake, normalize them before returning or saving the citation.
+   - If the web result is incomplete or conflicting, continue searching until the citation is as complete and accurate as the available sources allow, or surface the ambiguity to the user.
+5. Load the local data files from this skill directory before formatting:
    - `data/journal-abbreviations.json`
    - `data/conference-abbreviations.json`
    - `data/publisher-templates.json`
-5. Apply IEEE formatting rules.
-6. Return the final references numbered as `[1]`, `[2]`, and so on in the chat response.
-7. When the user provided a file or asked for an output file, save the results to:
+6. Apply IEEE formatting rules.
+7. Return the final references numbered as `[1]`, `[2]`, and so on in the chat response.
+8. When the user provided a file or asked for an output file, save the results to:
    - `<input_basename>_ieee.docx` next to the source file, or
    - `ieee_citations.docx` in the current working directory for direct text
-8. Create the saved `.docx` with one justified paragraph per reference, using Times New Roman, italic journal and conference venue names, straight double quotes around titles, and superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`.
+9. Create the saved `.docx` with one justified paragraph per reference, using Times New Roman, italic journal and conference venue names, curly quotes around titles, en dashes for page ranges, and superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`.
 
 ## Required Metadata
 
@@ -69,25 +75,32 @@ Use this skill when the user asks for IEEE citations, mentions `ieee-citation-ge
 
 Return citations as plain text in chat. Save the canonical deliverable as a `.docx` file.
 
+Apply these punctuation rules everywhere: instructions, examples, chat output, and the saved `.docx`.
+
 The saved Word document should format citations as:
 - Times New Roman for all citation text
 - fully justified paragraph alignment
 - one citation paragraph per reference
-- straight ASCII double quotes `"` around article and paper titles
+- curly quotation marks `“ ”` around article and paper titles, never straight ASCII `"` quotes
+- en dash `–` for page ranges, never hyphen `-`
 - italic journal and conference venue names only
 - superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th` wherever they appear
+- never emit `?` as a substitute for quotation marks, dashes, or other punctuation
 
 ### Journal article
 
 ```text
-[N] A. B. Surname, C. D. Surname, and E. F. Surname, "Title of article," Abbrev. J. Name, vol. X, no. Y, pp. Z1-Z2, Mon. Year.
+[N] A. B. Surname, C. D. Surname and E. F. Surname, “Title of article,” Abbrev. J. Name, vol. X, no. Y, pp. Z1–Z2, Mon. Year.
 ```
 
 Rules:
 - Format authors as initials plus surname.
 - For 1 to 3 authors, do not use an Oxford comma before `and`.
+- The 3-author form must be `M. Cheng, P. Han and Z. Wu`, not `M. Cheng, P. Han, and Z. Wu`.
 - For 4 to 6 authors, use an Oxford comma before `and`.
 - For 7 or more authors, list the first 6, then `et al.`
+- Always use curly quotes `“ ”` around article and paper titles.
+- Always use an en dash `–` for page ranges.
 - Use article numbers as `Art. no. XXXXX` when pages are unavailable.
 - Include a DOI only for early-access journal articles with no volume, issue, or pages yet.
 - Italicize the journal venue name in the Word document.
@@ -95,13 +108,14 @@ Rules:
 ### Conference paper
 
 ```text
-[N] A. B. Surname and C. D. Surname, "Title of paper," in Proc. Abbrev. Conf. Name, City, Country, Mon. Year, pp. Z1-Z2.
+[N] A. B. Surname and C. D. Surname, “Title of paper,” in Proc. Abbrev. Conf. Name, City, Country, Mon. Year, pp. Z1–Z2.
 ```
 
 Rules:
 - Always include `in Proc.`
 - Include city, country, and month when they can be verified.
 - Do not include DOI for conference papers.
+- Apply the same author-list punctuation rule as journal articles, including no Oxford comma for 3 authors.
 - Italicize the conference venue name in the Word document.
 - Superscript ordinal suffixes such as `24th` or `8th` in the Word document.
 
@@ -117,19 +131,19 @@ Rules:
 ### Book chapter
 
 ```text
-[N] A. B. Surname, "Chapter title," in Title of Book, A. B. Editor, Ed. City, Country: Publisher, Year, pp. Z1-Z2.
+[N] A. B. Surname, “Chapter title,” in Title of Book, A. B. Editor, Ed. City, Country: Publisher, Year, pp. Z1–Z2.
 ```
 
 ### Website
 
 ```text
-[N] A. B. Surname. "Page title." Website Name. URL (accessed Mon. Day, Year).
+[N] A. B. Surname. “Page title.” Website Name. URL (accessed Mon. Day, Year).
 ```
 
 ### arXiv preprint
 
 ```text
-[N] A. B. Surname and C. D. Surname, "Title," arXiv preprint arXiv:XXXX.XXXXX, Year.
+[N] A. B. Surname and C. D. Surname, “Title,” arXiv preprint arXiv:XXXX.XXXXX, Year.
 ```
 
 ## Special Handling
@@ -138,6 +152,7 @@ Rules:
 - Use `publisher-templates.json` for publisher-specific quirks such as article numbers or series formatting.
 - If a title maps to multiple possible works, surface the ambiguity and ask the user to choose.
 - Preserve input order when formatting multiple entries.
+- Treat author completeness, author-name order, publication date completeness, and dropped metadata as mandatory final checks before returning or saving the citations.
 
 ## Example
 
@@ -150,7 +165,7 @@ Attention Is All You Need
 Output shown in chat:
 
 ```text
-[1] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, et al., "Attention is all you need," in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS), Long Beach, CA, USA, Dec. 2017, pp. 5998-6008.
+[1] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, et al., “Attention is all you need,” in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS), Long Beach, CA, USA, Dec. 2017, pp. 5998–6008.
 ```
 
 Saved file:

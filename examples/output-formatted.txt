@@ -2,15 +2,17 @@ This repository treats `.docx` output as the canonical saved artifact.
 
 Expected paragraph content for the generated Word document:
 
-[1] K. He, X. Zhang, S. Ren, and J. Sun, "Deep residual learning for image recognition," in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, 2016, pp. 770-778, doi: 10.1109/CVPR.2016.90.
-[2] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, "BERT: Pre-training of deep bidirectional transformers for language understanding," in Proc. Conf. North Amer. Ch. Assoc. Comput. Linguist.: Hum. Lang. Technol. (NAACL-HLT), Minneapolis, MN, USA, 2019, pp. 4171-4186.
-[3] Z. Yang and F. Shang, "A review of electric machine topologies for traction applications," in Proc. IEEE Int. Elect. Mach. Drives Conf. (IEMDC), San Diego, CA, USA, 2019, pp. 1-8, doi: 10.1109/IEMDC.2019.8785049.
-[4] "PyTorch documentation." PyTorch. https://pytorch.org/docs/stable/index.html (accessed Apr. 3, 2026).
+[1] K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning for image recognition,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, 2016, pp. 770–778, doi: 10.1109/CVPR.2016.90.
+[2] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, “BERT: Pre-training of deep bidirectional transformers for language understanding,” in Proc. Conf. North Amer. Ch. Assoc. Comput. Linguist.: Hum. Lang. Technol. (NAACL-HLT), Minneapolis, MN, USA, 2019, pp. 4171–4186.
+[3] Z. Yang and F. Shang, “A review of electric machine topologies for traction applications,” in Proc. IEEE Int. Elect. Mach. Drives Conf. (IEMDC), San Diego, CA, USA, 2019, pp. 1–8, doi: 10.1109/IEMDC.2019.8785049.
+[4] “PyTorch documentation.” PyTorch. https://pytorch.org/docs/stable/index.html (accessed Apr. 3, 2026).
 [5] I. Goodfellow, Y. Bengio, and A. Courville, Deep Learning. Cambridge, MA, USA: MIT Press, 2016.
 
 Expected Word formatting for every citation paragraph:
 - Times New Roman
 - justified alignment
+- curly quotation marks around article and paper titles
+- en dashes for page ranges, never `?` or `-`
 - journal and conference venue names italicized
 - ordinal suffixes such as `24th` or `2nd ed.` rendered with superscript suffixes
 
