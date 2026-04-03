@@ -160,6 +160,10 @@ Rules:
 3. Save the formatted citations to a `.docx` file:
    - If input was a file such as `input.txt`, save as `input_ieee.docx` in the same directory.
    - If input was direct text, save as `ieee_citations.docx` in the current working directory.
+   - Use the shared exporter script whenever it is available instead of hand-building the Word file ad hoc.
+   - In this repository, the exporter lives at `scripts/export_ieee_docx.py`.
+   - In a standalone Claude install, the exporter should live at `~/.claude/skills/export_ieee_docx.py`.
+   - Run `python <exporter_path> <input_txt> [output_docx]` after the plain-text citations are finalized so journal and conference venue names are italicized and ordinal suffixes are superscripted consistently.
 4. Before returning or saving the citations, confirm that no author names, publication-date fields, or other verified metadata were dropped during reformatting.
 
 ## Special handling

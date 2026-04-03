@@ -17,6 +17,9 @@ https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/instal
 
 Then choose the Claude Code or Codex installation section that matches your environment.
 
+Word export uses the shared script `scripts/export_ieee_docx.py`, which requires the Python package `python-docx`.
+The install flow also places that exporter alongside the Claude or Codex skill so both platform variants can reuse the same export logic.
+
 ## What It Does
 
 - Takes paper titles, partial citations, or messy reference text as input
@@ -28,6 +31,7 @@ Then choose the Claude Code or Codex installation section that matches your envi
 - Uses standard IEEE abbreviations such as `IEEE Trans. Power Electron.` and `in Proc. IEEE Int. Conf. Elect. Mach. Drives`
 - Works with non-IEEE publishers while still formatting in IEEE style
 - Saves formatted citations to a `.docx` file by default so Word preserves IEEE-required punctuation and formatting reliably
+- Includes a shared exporter script at `scripts/export_ieee_docx.py` so Claude Code and Codex can create consistent Word output from the same logic
 
 ## Usage
 
@@ -108,6 +112,7 @@ Word output is the default because many plain-text editors and clipboard paths s
 - `commands/ieee-cite.md` - Claude Code slash command
 - `skills/ieee-citation-generator.md` - Claude Code skill instructions
 - `codex/ieee-citation-generator/SKILL.md` - Codex skill instructions
+- `scripts/export_ieee_docx.py` - shared Word exporter for both platforms
 - `data/` - shared abbreviation and formatting data for both platforms
 - `tests/test-cases.md` - manual regression scenarios
 - `tests/test_skill_regressions.py` - automated prompt-package regression checks

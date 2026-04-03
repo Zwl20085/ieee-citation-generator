@@ -56,6 +56,10 @@ Use this skill when the user asks for IEEE citations, mentions `ieee-citation-ge
    - `ieee_citations.docx` in the current working directory for direct text
 9. Create the saved `.docx` with one justified paragraph per reference, using Times New Roman, italic journal and conference venue names, curly quotes around titles, en dashes for page ranges, and superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`.
    - Add paragraph spacing between references so consecutive entries remain visually separated.
+   - Use the shared exporter script instead of improvising a new Word-export implementation whenever it is available.
+   - In this repository, the exporter lives at `scripts/export_ieee_docx.py`.
+   - In a standalone Codex install, the exporter should live at `~/.codex/skills/ieee-citation-generator/export_ieee_docx.py`.
+   - Run `python <exporter_path> <input_txt> [output_docx]` after the plain-text citations are finalized so journal and conference venue names are italicized and ordinal suffixes are superscripted consistently.
 
 ## Required Metadata
 

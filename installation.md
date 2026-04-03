@@ -6,9 +6,12 @@ After installation, the skill should save formatted citations as `.docx` files b
 
 The saved Word document should format citations as Times New Roman, justified paragraphs, curly quotes around article and paper titles, en dashes for page ranges, italic journal and conference venue names, and superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`.
 
+This repository also ships a shared exporter script at `scripts/export_ieee_docx.py`. Claude Code and Codex should use that script when converting finalized citation text into `.docx` output so venue italics and ordinal superscripts are applied consistently.
+
 ## Prerequisites
 
 - Claude Code or Codex installed and configured
+- Python with `python-docx` installed for `.docx` export
 - `curl` available in the terminal
 - Internet access to fetch files from GitHub
 
@@ -52,17 +55,25 @@ curl -fSL -o ~/.claude/skills/ieee-citation-data/publisher-templates.json \
   "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/data/publisher-templates.json"
 ```
 
-### Step 5: Verify Claude installation
+### Step 5: Download the shared Word exporter script
+
+```bash
+curl -fSL -o ~/.claude/skills/export_ieee_docx.py \
+  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/scripts/export_ieee_docx.py"
+```
+
+### Step 6: Verify Claude installation
 
 ```bash
 ls -la ~/.claude/commands/ieee-cite.md
 ls -la ~/.claude/skills/ieee-citation-generator.md
+ls -la ~/.claude/skills/export_ieee_docx.py
 ls -la ~/.claude/skills/ieee-citation-data/
 ```
 
-Expected output: 5 files total - 1 command `.md` file, 1 skill `.md` file, and 3 `.json` data files.
+Expected output: 6 files total - 1 command `.md` file, 1 skill `.md` file, 1 exporter `.py` file, and 3 `.json` data files.
 
-### Step 6: Test in Claude Code
+### Step 7: Test in Claude Code
 
 ```text
 /ieee-cite Attention Is All You Need
@@ -102,16 +113,24 @@ curl -fSL -o ~/.codex/skills/ieee-citation-generator/data/publisher-templates.js
   "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/data/publisher-templates.json"
 ```
 
-### Step 4: Verify Codex installation
+### Step 4: Download the shared Word exporter script
+
+```bash
+curl -fSL -o ~/.codex/skills/ieee-citation-generator/export_ieee_docx.py \
+  "https://raw.githubusercontent.com/Zwl20085/ieee-citation-generator/master/scripts/export_ieee_docx.py"
+```
+
+### Step 5: Verify Codex installation
 
 ```bash
 ls -la ~/.codex/skills/ieee-citation-generator/SKILL.md
+ls -la ~/.codex/skills/ieee-citation-generator/export_ieee_docx.py
 ls -la ~/.codex/skills/ieee-citation-generator/data/
 ```
 
-Expected output: 4 files total - 1 `SKILL.md` file and 3 `.json` data files.
+Expected output: 5 files total - 1 `SKILL.md` file, 1 exporter `.py` file, and 3 `.json` data files.
 
-### Step 5: Test in Codex
+### Step 6: Test in Codex
 
 Ask Codex to use the installed skill, for example:
 
@@ -134,6 +153,7 @@ The skill should produce formatted IEEE citations in chat and save a `.docx` out
 ```bash
 rm ~/.claude/commands/ieee-cite.md
 rm ~/.claude/skills/ieee-citation-generator.md
+rm ~/.claude/skills/export_ieee_docx.py
 rm -rf ~/.claude/skills/ieee-citation-data/
 ```
 

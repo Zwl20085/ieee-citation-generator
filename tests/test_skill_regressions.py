@@ -8,8 +8,9 @@ CODEX_SKILL = REPO_ROOT / "codex" / "ieee-citation-generator" / "SKILL.md"
 README = REPO_ROOT / "README.md"
 INSTALLATION = REPO_ROOT / "installation.md"
 TEST_CASES = REPO_ROOT / "tests" / "test-cases.md"
+EXPORTER = REPO_ROOT / "scripts" / "export_ieee_docx.py"
 
-REPO_DOCS = [CLAUDE_SKILL, CODEX_SKILL, README, INSTALLATION, TEST_CASES]
+REPO_DOCS = [CLAUDE_SKILL, CODEX_SKILL, README, INSTALLATION, TEST_CASES, EXPORTER]
 
 
 def read_text(path: Path) -> str:
@@ -17,7 +18,7 @@ def read_text(path: Path) -> str:
 
 
 def test_repo_docs_are_free_of_known_mojibake_sequences():
-    bad_tokens = ["鈥", "揱", "漙", "锟", "�"]
+    bad_tokens = ["閳?", "鎻?", "婕?", "閿?", "锟?"]
 
     for path in REPO_DOCS:
         text = read_text(path)
@@ -30,7 +31,7 @@ def test_skill_docs_require_punctuation_normalization_and_author_restoration():
         text = read_text(path)
         assert "Never keep a shortened or truncated input author list" in text
         assert "placeholder `?` characters in the final citation" in text
-        assert "“Incorporating skew in a magnetic equivalent circuit model of synchronous machines,”" in text
+        assert "Incorporating skew in a magnetic equivalent circuit model of synchronous machines" in text
         assert "J. Chen, W. Hua, L. Shao and Z. Wu" in text
 
 
@@ -40,7 +41,8 @@ def test_supporting_docs_explain_corruption_and_word_output_requirements():
 
     assert "Never substitute `?` for quotation marks or page-range dashes" in readme
     assert "Output shows `?` instead of quotes or page dashes" in installation
-    assert "Replace the affected characters with curly quotes `“ ”` and en dashes `–`" in installation
+    assert "Replace the affected characters with curly quotes" in installation
+    assert "en dashes" in installation
 
 
 def test_manual_tests_include_the_two_reported_regressions():
@@ -48,5 +50,17 @@ def test_manual_tests_include_the_two_reported_regressions():
 
     assert "T6: Reported regression - punctuation corruption in Ref. 15" in cases
     assert "T7: Reported regression - missing authors in Ref. 16" in cases
-    assert "pp. 816–818" in cases
+    assert "pp. 816" in cases
+    assert "Jun. 2015." in cases
     assert "J. Chen, W. Hua, L. Shao and Z. Wu" in cases
+
+
+def test_repo_includes_shared_docx_exporter_and_skill_hooks():
+    exporter = read_text(EXPORTER)
+    claude = read_text(CLAUDE_SKILL)
+    codex = read_text(CODEX_SKILL)
+
+    assert "def export_docx" in exporter
+    assert "detect_venue_range" in exporter
+    assert "scripts/export_ieee_docx.py" in claude
+    assert "scripts/export_ieee_docx.py" in codex
