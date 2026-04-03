@@ -88,7 +88,6 @@ Apply these spacing rules everywhere as well:
 - Use exactly one space between the closing title quote and the following journal, conference, book, or website text.
 - When returning multiple references in chat, separate them with a blank line.
 - In the saved Word document, keep one citation paragraph per reference and leave visible paragraph spacing between references.
-
 The saved Word document should format citations as:
 - Times New Roman for all citation text
 - fully justified paragraph alignment

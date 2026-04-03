@@ -165,11 +165,12 @@ cp data/*.json ~/.codex/skills/ieee-citation-generator/data/
 This skill follows the [IEEE Reference Guide](https://ieeeauthorcenter.ieee.org/wp-content/uploads/IEEE-Reference-Guide.pdf) for formatting. Key rules:
 
 - Author names: initials before surname (e.g., "J. K. Smith")
-- "and" before the last author; "et al." for 7+ authors
-- Article titles in double quotes, sentence case
+- No Oxford comma for 1-3 authors; use `M. Cheng, P. Han and Z. Wu`, not `M. Cheng, P. Han, and Z. Wu`
+- Oxford comma before `and` for 4-6 authors; `et al.` for 7+ authors
+- Article titles in curly quotes, sentence case
 - Use exactly one space after the closing title quote before the following venue text
 - Journal and conference names abbreviated per IEEE standards
-- En dash for page ranges in the saved Word document
+- En dash for page ranges everywhere
 - Saved Word output uses Times New Roman and justified paragraphs
 - Journal and conference venue names are italicized in the Word document
 - Ordinal suffixes such as `st`, `nd`, `rd`, and `th` are superscripted in the Word document

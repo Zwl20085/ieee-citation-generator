@@ -115,8 +115,10 @@ Rules:
 - Author names: first/middle initials then surname. E.g., "J. K. Smith"
 - Author "and" formatting depends on author count:
   - 1-3 authors: NO Oxford comma - "A. Smith, B. Jones and C. Lee"
+  - 3-author regression guard: correct `M. Cheng, P. Han and Z. Wu`; incorrect `M. Cheng, P. Han, and Z. Wu`
   - 4-6 authors: Oxford comma before "and" - "A. Smith, B. Jones, C. Lee, and D. Brown"
   - 7+ authors: list the first 6, then "et al."
+- Title in curly quotation marks `“ ”` and sentence case
 - Title in curly quotation marks `“ ”` and sentence case
 - Journal name abbreviated, not in quotes in the plain-text response, but italicized in the Word document
 - Use an en dash for page ranges
@@ -135,7 +137,7 @@ Rules:
 - Include month in the date field when it can be verified
 - Pages are optional, but include them when available
 - Do not include DOI for conference papers
-- Apply the same author-list punctuation rule as journal articles
+- Apply the same author-list punctuation rule as journal articles, including no Oxford comma for exactly 3 authors
 - Italicize the conference venue name in the Word document
 - Superscript ordinal suffixes such as `24th` or `8th` in the Word document
 
@@ -186,9 +188,12 @@ Rules:
    - Use Times New Roman and justified paragraph alignment throughout
    - Add paragraph spacing between citation paragraphs so adjacent references do not visually run together
    - Preserve curly quotation marks around titles and en dashes for page ranges
+   - Add paragraph spacing between citation paragraphs so adjacent references do not visually run together
+   - Preserve curly quotation marks around titles and en dashes for page ranges
    - Italicize journal and conference venue names only
    - Render ordinal suffixes `st`, `nd`, `rd`, and `th` as superscript wherever they appear
    - Treat the `.docx` file as the primary artifact even though the conversation response remains plain text
+4. Before returning or saving the citations, confirm that no author names, publication-date fields, or other verified metadata were dropped during reformatting.
 
 ### Special Handling
 
