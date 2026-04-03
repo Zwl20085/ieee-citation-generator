@@ -8,7 +8,7 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 
 **Expected output shown in chat:**
 ```text
-[1] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, et al., "Attention is all you need," in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS), Long Beach, CA, USA, 2017, pp. 5998-6008.
+[1] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, et al., “Attention is all you need,” in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS), Long Beach, CA, USA, 2017, pp. 5998–6008.
 ```
 
 **Verify:**
@@ -27,7 +27,7 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 
 **Expected output shown in chat:**
 ```text
-[1] K. He, X. Zhang, S. Ren, and J. Sun, "Deep residual learning for image recognition," in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, 2016, pp. 770-778, doi: 10.1109/CVPR.2016.90.
+[1] K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning for image recognition,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, 2016, pp. 770–778, doi: 10.1109/CVPR.2016.90.
 ```
 
 **Verify:**
@@ -64,7 +64,7 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 
 **Expected output shown in chat:**
 ```text
-[1] "PyTorch documentation." PyTorch. https://pytorch.org/docs/stable/index.html (accessed Mon. Day, Year).
+[1] “PyTorch documentation.” PyTorch. https://pytorch.org/docs/stable/index.html (accessed Mon. Day, Year).
 ```
 
 **Verify:**
@@ -92,7 +92,7 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 
 **Expected output shown in chat:**
 ```text
-[1] T. Brown, B. Mann, N. Ryder, M. Subbiah, J. D. Kaplan, P. Dhariwal, et al., "Language models are few-shot learners," in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS), Virtual, 2020, pp. 1877-1901.
+[1] T. Brown, B. Mann, N. Ryder, M. Subbiah, J. D. Kaplan, P. Dhariwal, et al., “Language models are few-shot learners,” in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS), Virtual, 2020, pp. 1877–1901.
 ```
 
 **Verify:**
@@ -115,7 +115,7 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 
 **Expected output shown in chat:**
 ```text
-[1] T. Brown, B. Mann, N. Ryder, M. Subbiah, J. D. Kaplan, P. Dhariwal, et al., "Language models are few-shot learners," arXiv preprint arXiv:2005.14165, 2020.
+[1] T. Brown, B. Mann, N. Ryder, M. Subbiah, J. D. Kaplan, P. Dhariwal, et al., “Language models are few-shot learners,” arXiv preprint arXiv:2005.14165, 2020.
 ```
 
 **Verify:**
@@ -125,11 +125,11 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 
 ## T10: IEEE journal article with full metadata
 
-**Input:** `Z. Yang et al., "Design of hairpin winding electric machines," IEEE Trans. Transport. Electrific., vol. 9, no. 1, pp. 1200-1210, Mar. 2023`
+**Input:** `Z. Yang et al., “Design of hairpin winding electric machines,” IEEE Trans. Transport. Electrific., vol. 9, no. 1, pp. 1200-1210, Mar. 2023`
 
 **Expected output shown in chat:**
 ```text
-[1] Z. Yang et al., "Design of hairpin winding electric machines," IEEE Trans. Transport. Electrific., vol. 9, no. 1, pp. 1200-1210, Mar. 2023.
+[1] Z. Yang et al., “Design of hairpin winding electric machines,” IEEE Trans. Transport. Electrific., vol. 9, no. 1, pp. 1200–1210, Mar. 2023.
 ```
 
 **Verify:**
@@ -146,8 +146,8 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 
 **Verify:**
 - [x] The saved Word document contains one citation paragraph
-- [x] Title quotes remain straight double quotes in the saved document
-- [x] Page ranges render with the intended dash glyph in Word output instead of collapsing to editor-dependent mojibake
+- [x] Title quotes remain curly quotes in the saved document
+- [x] Page ranges render with an en dash in Word output
 
 ## T12: Ordinal superscript formatting
 
@@ -158,3 +158,37 @@ Manual test scenarios for verifying the IEEE Citation Generator skill.
 **Verify:**
 - [x] The ordinal suffix `th` is superscripted in the Word document
 - [x] The same superscript rule applies to `1st`, `2nd`, `3rd`, and edition ordinals such as `2nd ed.`
+
+## T13: Three-author punctuation regression
+
+**Input:** `M. Cheng, P. Han, Z. Wu, Editorial for the special issue on advanced electric machines and drives for battery, hybrid, and fuel cell electric vehicles, Chinese Journal of Electrical Engineering, vol. 7, no. 3, pp. 1-3, Sep. 2021`
+
+**Expected output shown in chat:**
+```text
+[1] M. Cheng, P. Han and Z. Wu, “Editorial for the special issue on advanced electric machines and drives for battery, hybrid, and fuel cell electric vehicles,” Chin. J. Elect. Eng., vol. 7, no. 3, pp. 1–3, Sep. 2021.
+```
+
+**Verify:**
+- [x] No Oxford comma before `and` for exactly 3 authors
+- [x] Curly quotes preserved around the title
+- [x] Hyphen replaced with en dash in the page range
+
+## T14: Four-author punctuation rule
+
+**Input:** `A. Smith, B. Jones, C. Lee, D. Brown, Sample conference paper, ICCV 2023`
+
+**Expected output:** Uses an Oxford comma before `and` in the four-author list.
+
+**Verify:**
+- [x] Four-author output uses `A. Smith, B. Jones, C. Lee, and D. Brown`
+- [x] Title uses curly quotes
+
+## T15: Two-author punctuation rule
+
+**Input:** `A. Smith, B. Jones, Sample journal article, IEEE Transactions on Power Electronics, vol. 1, no. 2, pp. 10-20, Jan. 2024`
+
+**Expected output:** Uses `A. Smith and B. Jones` with no comma before `and`.
+
+**Verify:**
+- [x] Two-author output omits the comma before `and`
+- [x] Page range uses an en dash

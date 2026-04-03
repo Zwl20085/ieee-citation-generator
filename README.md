@@ -66,9 +66,9 @@ https://pytorch.org/docs/stable/index.html
 Formatted citations are shown in chat as plain text and saved to a `.docx` file:
 
 ```text
-[1] K. He, X. Zhang, S. Ren, and J. Sun, "Deep residual learning for image recognition," in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, Jun. 2016, pp. 770-778.
-[2] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, "BERT: Pre-training of deep bidirectional transformers for language understanding," in Proc. Conf. North Amer. Ch. Assoc. Comput. Linguist.: Hum. Lang. Technol. (NAACL-HLT), Minneapolis, MN, USA, Jun. 2019, pp. 4171-4186.
-[3] "PyTorch documentation." PyTorch. https://pytorch.org/docs/stable/index.html (accessed Apr. 3, 2026).
+[1] K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning for image recognition,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, Jun. 2016, pp. 770–778.
+[2] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, “BERT: Pre-training of deep bidirectional transformers for language understanding,” in Proc. Conf. North Amer. Ch. Assoc. Comput. Linguist.: Hum. Lang. Technol. (NAACL-HLT), Minneapolis, MN, USA, Jun. 2019, pp. 4171–4186.
+[3] “PyTorch documentation.” PyTorch. https://pytorch.org/docs/stable/index.html (accessed Apr. 3, 2026).
 ```
 
 Saved file names:
@@ -78,7 +78,8 @@ Saved file names:
 The saved Word document should format each citation as:
 - one justified paragraph per citation
 - Times New Roman for all text
-- straight double quotes around article and paper titles
+- curly quotation marks `“ ”` around article and paper titles
+- en dash `–` for page ranges, never hyphen `-`
 - italic journal and conference venue names only
 - superscript ordinal suffixes such as `st`, `nd`, `rd`, and `th`
 
@@ -158,10 +159,11 @@ cp data/*.json ~/.codex/skills/ieee-citation-generator/data/
 This skill follows the [IEEE Reference Guide](https://ieeeauthorcenter.ieee.org/wp-content/uploads/IEEE-Reference-Guide.pdf) for formatting. Key rules:
 
 - Author names: initials before surname (e.g., "J. K. Smith")
-- "and" before the last author; "et al." for 7+ authors
-- Article titles in double quotes, sentence case
+- No Oxford comma for 1-3 authors; use `M. Cheng, P. Han and Z. Wu`, not `M. Cheng, P. Han, and Z. Wu`
+- Oxford comma before `and` for 4-6 authors; `et al.` for 7+ authors
+- Article titles in curly quotes, sentence case
 - Journal and conference names abbreviated per IEEE standards
-- En dash for page ranges in the saved Word document
+- En dash for page ranges everywhere
 - Saved Word output uses Times New Roman and justified paragraphs
 - Journal and conference venue names are italicized in the Word document
 - Ordinal suffixes such as `st`, `nd`, `rd`, and `th` are superscripted in the Word document
