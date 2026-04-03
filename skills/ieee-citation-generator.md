@@ -36,8 +36,8 @@ If any required fields are missing, use web search to find them.
 
 | Type | Required Fields |
 |------|----------------|
-| Journal | Authors, title, journal name, volume, number/issue, pages or article number, month, year, DOI (if available) |
-| Conference | Authors, title, conference name, city, country, year, pages (if available) |
+| Journal | Authors, title, journal name, volume, number/issue, pages or article number, month, year |
+| Conference | Authors, title, conference name, city, country, month, year, pages (if available) |
 | Book | Authors/editors, title, edition (if not 1st), city, country, publisher, year |
 | Website | Author (if available), page title, website name, URL, access date |
 
@@ -67,7 +67,7 @@ Load the abbreviation data from the skill's data directory:
 
 ### Step 5: Format Citations
 
-Apply the correct IEEE template based on citation type. Use plain text (no italics/bold markup since output is `.txt`).
+Apply the correct IEEE template based on citation type. Use plain text (no italics/bold markup since output is `.txt`). Always use straight ASCII double quotes `"` for article and paper titles — never curly/typographic quotes (`"` `"`).
 
 #### Journal Article
 ```
@@ -76,25 +76,29 @@ Apply the correct IEEE template based on citation type. Use plain text (no itali
 
 Rules:
 - Author names: first/middle initials then surname. E.g., "J. K. Smith"
-- Use "and" before the last author
-- For 7+ authors: list first 6, then "et al."
-- Title in double quotes, sentence case (capitalize first word and proper nouns only)
+- Author "and" formatting depends on author count:
+  - 1–3 authors: NO Oxford comma — "A. Smith, B. Jones and C. Lee"
+  - 4–6 authors: Oxford comma before "and" — "A. Smith, B. Jones, C. Lee, and D. Brown"
+  - 7+ authors: list first 6 (Oxford comma before last of the six), then "et al." — "A. Smith, B. Jones, C. Lee, D. Brown, E. White, F. Black, et al."
+- Title in straight ASCII double quotes " (not curly/smart quotes " "), sentence case (capitalize first word and proper nouns only)
 - Journal name abbreviated, NOT in quotes
 - Use en-dash (–) for page ranges, not hyphen (-)
 - If article number instead of pages: use "Art. no. XXXXX" instead of "pp."
-- Include DOI if available, formatted as `doi: 10.xxxx/xxxxx.` (lowercase "doi", with period at end)
+- Do NOT include DOI for standard journal articles (those with volume/issue/pages). DOI is only included for early access articles (see Special Handling below).
 - Month abbreviated: Jan., Feb., Mar., Apr., May, Jun., Jul., Aug., Sep., Oct., Nov., Dec.
 
 #### Conference Paper
 ```
-[N] A. B. Surname and C. D. Surname, "Title of paper," in Proc. Abbrev. Conf. Name, City, Country, Year, pp. Z1–Z2.
+[N] A. B. Surname and C. D. Surname, "Title of paper," in Proc. Abbrev. Conf. Name, City, Country, Mon. Year, pp. Z1–Z2.
 ```
 
 Rules:
 - "in Proc." before conference name (lowercase "in")
 - Include city and country
+- Include month in the date field (e.g., "May 2009" not just "2009"). If the month is not provided in the input, perform a web search to find it.
 - Pages optional (include if available)
-- If DOI available, append: `doi: 10.xxxx/xxxxx.`
+- Do NOT include DOI for conference papers.
+- Apply the same author "and" comma rule as for journal articles: no Oxford comma for ≤3 authors, Oxford comma before "and" for 4–6 authors.
 
 #### Book
 ```
@@ -149,6 +153,7 @@ Rules:
 
 **Early access / in-press articles:**
 - Use "early access" after the journal name: `"Title," Abbrev. J. Name, early access, doi: 10.xxxx/xxxxx.`
+- Early access articles are the ONLY journal citation type that includes a DOI, because they have no volume/issue/pages yet.
 
 **Multiple citations from one input:**
 - Number them sequentially
@@ -176,7 +181,7 @@ Attention Is All You Need
 
 **Output:**
 ```
-[1] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, et al., "Attention is all you need," in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS), Long Beach, CA, USA, 2017, pp. 5998–6008.
+[1] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, et al., "Attention is all you need," in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS), Long Beach, CA, USA, Dec. 2017, pp. 5998–6008.
 ```
 
 **Input (file with multiple entries):**
@@ -188,8 +193,8 @@ https://pytorch.org/docs/stable/index.html
 
 **Output:**
 ```
-[1] K. He, X. Zhang, S. Ren, and J. Sun, "Deep residual learning for image recognition," in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, 2016, pp. 770–778, doi: 10.1109/CVPR.2016.90.
-[2] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, "BERT: Pre-training of deep bidirectional transformers for language understanding," in Proc. Conf. North Amer. Ch. Assoc. Comput. Linguist.: Hum. Lang. Technol. (NAACL-HLT), Minneapolis, MN, USA, 2019, pp. 4171–4186.
+[1] K. He, X. Zhang, S. Ren, and J. Sun, "Deep residual learning for image recognition," in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Las Vegas, NV, USA, Jun. 2016, pp. 770–778.
+[2] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, "BERT: Pre-training of deep bidirectional transformers for language understanding," in Proc. Conf. North Amer. Ch. Assoc. Comput. Linguist.: Hum. Lang. Technol. (NAACL-HLT), Minneapolis, MN, USA, Jun. 2019, pp. 4171–4186.
 [3] "PyTorch documentation." PyTorch. https://pytorch.org/docs/stable/index.html (accessed Apr. 3, 2026).
 ```
 
